@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2113.65">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    span.s1 {font: 12.0px 'Hiragino Sans'}
+    span.s2 {font: 12.0px 'Apple Color Emoji'}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ja"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Latihan JFT A2 - Soal 1&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>* {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #f4f6f9;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.quiz-card {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 480px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.question-title {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #666;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>letter-spacing: 1px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.question-text {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.6;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ruby rt {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.6em;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #e65100;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.translation {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #666;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: normal;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.image-container {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 16px 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 2px solid #eef2f5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #fafafa;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.image-container img {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-height: 220px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>object-fit: contain;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.options-container {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-option {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 2px solid #007bff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #007bff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: all 0.2s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: left;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-option:hover {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #007bff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-option:disabled {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: not-allowed;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>opacity: 0.8;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Warna feedback jawaban */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-option.correct {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #28a745 !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: #28a745 !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #ffffff !important;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-option.incorrect {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #dc3545 !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: #dc3545 !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #ffffff !important;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#result-message {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>min-height: 27px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="quiz-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="question-title"&gt;Soal Nomor 1&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Instruksi Soal dengan Furigana --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="question-text"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;ruby&gt;<span class="s1">正</span>&lt;rt&gt;<span class="s1">ただ</span>&lt;/rt&gt;&lt;/ruby&gt;<span class="s1">しいものを</span>&lt;ruby&gt;<span class="s1">選</span>&lt;rt&gt;<span class="s1">えら</span>&lt;/rt&gt;&lt;/ruby&gt;<span class="s1">びましょう。</span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="translation"&gt;Pilihlah kata yang benar.&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Gambar Ilustrasi dari Irodori --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="image-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- Ubah path src sesuai lokasi file gambar kamu di GitHub --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="assets/images/X_11_3_11_benkyoosuru.png" alt="Ilustrasi Soal 1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Pilihan Jawaban --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="options-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn-option" onclick="checkAnswer(1, this)"&gt;1. <span class="s1">べんきょうします</span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn-option" onclick="checkAnswer(2, this)"&gt;2. <span class="s1">なおします</span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn-option" onclick="checkAnswer(3, this)"&gt;3. <span class="s1">かわります</span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Hasil Jawaban --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="result-message"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Kunci jawaban: pilihan nomor 1 (<span class="s1">べんきょうします</span>)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const correctAnswer = 1;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function checkAnswer(selectedOption, element) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const resultDiv = document.getElementById('result-message');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const allButtons = document.querySelectorAll('.btn-option');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// Nonaktifkan semua tombol setelah memilih</p>
+<p class="p1"><span class="Apple-converted-space">      </span>allButtons.forEach(btn =&gt; btn.disabled = true);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (selectedOption === correctAnswer) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>element.classList.add('correct');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultDiv.innerHTML = "<span class="s2">⭕</span> <span class="s1">正解</span> (Benar)!";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultDiv.style.color = "#28a745";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>element.classList.add('incorrect');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Tandai juga mana yang seharusnya benar</p>
+<p class="p1"><span class="Apple-converted-space">        </span>allButtons[correctAnswer - 1].classList.add('correct');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultDiv.innerHTML = "<span class="s2">❌</span> <span class="s1">不正解</span> (Salah)!";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultDiv.style.color = "#dc3545";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
