@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latihan JFT A2 - Soal 1</title>
+  
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .quiz-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 100%;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .question-header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2d3748;
+      margin: 0 0 6px 0;
+      line-height: 1.8;
+    }
+
+    .translation {
+      font-size: 0.95rem;
+      color: #718096;
+      margin: 0;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .quiz-image {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      object-fit: contain;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border: 2px solid #cbd5e0;
+      background-color: #ffffff;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .option-btn:hover {
+      border-color: #3182ce;
+      background-color: #ebf8ff;
+    }
+
+    .option-num {
+      font-weight: bold;
+      margin-right: 12px;
+      background-color: #e2e8f0;
+      color: #4a5568;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+      font-size: 1.05rem;
+    }
+
+    .correct {
+      background-color: #c6f6d5;
+      color: #22543d;
+      border: 1px solid #9ae6b4;
+    }
+
+    .incorrect {
+      background-color: #fed7d7;
+      color: #742a2a;
+      border: 1px solid #feb2b2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-card">
+    <!-- Header Soal dengan Furigana -->
+    <div class="question-header">
+      <p class="question-title">
+        <ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。
+      </p>
+      <p class="translation">Pilihlah kata yang benar.</p>
+    </div>
+
+    <!-- Gambar dari Irodori -->
+    <div class="image-container">
+      <img src="assets/images/X_11_3_11_benkyoosuru.png" alt="X_11_3_11_benkyoosuru" class="quiz-image">
+    </div>
+
+    <!-- Pilihan Jawaban -->
+    <div class="options-container">
+      <button class="option-btn" onclick="checkAnswer(1)">
+        <span class="option-num">1</span> べんきょうします
+      </button>
+      <button class="option-btn" onclick="checkAnswer(2)">
+        <span class="option-num">2</span> なおします
+      </button>
+      <button class="option-btn" onclick="checkAnswer(3)">
+        <span class="option-num">3</span> かわります
+      </button>
+    </div>
+
+    <!-- Pesan Feedback Hasil -->
+    <div id="feedback"></div>
+  </div>
+
+  <!-- Logika JS Sederhana -->
+  <script>
+    // Jawaban yang benar adalah pilihan nomor 1 (べんきょうします)
+    const correctAnswer = 1;
+
+    function checkAnswer(selectedOption) {
+      const feedbackDiv = document.getElementById('feedback');
+      feedbackDiv.style.display = 'block';
+
+      if (selectedOption === correctAnswer) {
+        feedbackDiv.className = 'correct';
+        feedbackDiv.innerHTML = '⭕ 正解 (Seikai)! Jawaban benar.';
+      } else {
+        feedbackDiv.className = 'incorrect';
+        feedbackDiv.innerHTML = '❌ 不正解 (Fuseikai)! Coba lagi.';
+      }
+    }
+  </script>
+
+</body>
+</html>
