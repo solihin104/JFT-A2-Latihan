@@ -3,172 +3,1210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Latihan JFT A2 - Soal 1</title>
-  
+  <title>Bank Soal Lengkap JFT-Basic A2 - Irodori</title>
   <style>
+    :root {
+      --primary-color: #2b6cb0;
+      --primary-hover: #2c5282;
+      --bg-color: #f7fafc;
+      --card-bg: #ffffff;
+      --text-color: #2d3748;
+      --border-color: #e2e8f0;
+      --correct-bg: #c6f6d5;
+      --correct-text: #22543d;
+      --incorrect-bg: #fed7d7;
+      --incorrect-text: #742a2a;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-      background-color: #f0f4f8;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+    }
+
+    .main-container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      color: var(--primary-color);
+      margin: 0 0 8px 0;
+      font-size: 1.5rem;
+    }
+
+    header p {
+      color: #718096;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* Tab Navigasi */
+    .tab-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 10px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: #4a5568;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-color);
+      color: #fff;
+      border-color: var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     .quiz-card {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      max-width: 480px;
-      width: 100%;
-      padding: 24px;
-      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
     }
 
-    .question-header {
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 12px;
+    .section-title {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 8px;
+      margin-top: 0;
       margin-bottom: 20px;
     }
 
-    .question-title {
-      font-size: 1.2rem;
+    .question-box {
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .question-box:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .question-number {
       font-weight: bold;
-      color: #2d3748;
-      margin: 0 0 6px 0;
-      line-height: 1.8;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: bold;
+      line-height: 1.6;
+      margin-bottom: 10px;
     }
 
     .translation {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #718096;
-      margin: 0;
+      margin-bottom: 12px;
     }
 
-    .image-container {
+    .reading-box {
+      background: #edf2f7;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      line-height: 1.8;
+      font-size: 1rem;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .media-container {
       text-align: center;
-      margin-bottom: 20px;
+      margin: 12px 0;
     }
 
     .quiz-image {
       max-width: 100%;
       max-height: 220px;
       border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--border-color);
       object-fit: contain;
+    }
+
+    .speaker-btn {
+      background-color: #2b6cb0;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s, transform 0.1s;
+      margin: 8px 0;
+    }
+
+    .speaker-btn:hover {
+      background-color: #2c5282;
+    }
+
+    .speaker-btn:active {
+      transform: scale(0.98);
     }
 
     .options-container {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .option-btn {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
-      border: 2px solid #cbd5e0;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
       background-color: #ffffff;
       border-radius: 8px;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       cursor: pointer;
-      transition: all 0.2s ease;
       text-align: left;
+      transition: all 0.2s;
+      width: 100%;
     }
 
     .option-btn:hover {
-      border-color: #3182ce;
+      border-color: var(--primary-color);
       background-color: #ebf8ff;
     }
 
     .option-num {
       font-weight: bold;
       margin-right: 12px;
-      background-color: #e2e8f0;
+      background-color: #edf2f7;
       color: #4a5568;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      flex-shrink: 0;
     }
 
-    #feedback {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 8px;
+    .feedback {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 6px;
       font-weight: bold;
-      text-align: center;
       display: none;
-      font-size: 1.05rem;
+      font-size: 0.92rem;
     }
 
     .correct {
-      background-color: #c6f6d5;
-      color: #22543d;
+      background-color: var(--correct-bg);
+      color: var(--correct-text);
       border: 1px solid #9ae6b4;
     }
 
     .incorrect {
-      background-color: #fed7d7;
-      color: #742a2a;
+      background-color: var(--incorrect-bg);
+      color: var(--incorrect-text);
       border: 1px solid #feb2b2;
     }
   </style>
 </head>
 <body>
 
-  <div class="quiz-card">
-    <!-- Header Soal dengan Furigana -->
-    <div class="question-header">
-      <p class="question-title">
-        <ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。
-      </p>
-      <p class="translation">Pilihlah kata yang benar.</p>
+  <div class="main-container">
+    <header>
+      <h1>JFT-Basic A2 Bank Soal Lengkap</h1>
+      <p>58 Soal Latihan (Moji-Goi, Kaiwa, Choukai TTS, Dokkai) Berdasarkan Standard Irodori</p>
+    </header>
+
+    <!-- Navigasi Sesi -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="openTab('mojigoi')">Sesi 1: 文字・語彙</button>
+      <button class="tab-btn" onclick="openTab('kaiwa')">Sesi 2: 会話</button>
+      <button class="tab-btn" onclick="openTab('choukai')">Sesi 3: 聴解 (TTS)</button>
+      <button class="tab-btn" onclick="openTab('dokkai')">Sesi 4: 読解</button>
     </div>
 
-    <!-- Gambar dari Irodori -->
-    <div class="image-container">
-      <img src="assets/images/X_11_3_11_benkyoosuru.png" alt="X_11_3_11_benkyoosuru" class="quiz-image">
+    <!-- ==================== SESI 1: MOJI-GOI (15 SOAL) ==================== -->
+    <div id="mojigoi" class="tab-content active">
+      <div class="quiz-card">
+        <h2 class="section-title">Sesi 1: 文字・語彙 (Moji-Goi - 15 Soal)</h2>
+
+        <!-- M-01 -->
+        <div class="question-box">
+          <div class="question-number">Soal 1 (M-01)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/X_11_3_11_benkyoosuru.png" alt="Belajar" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m01', 1, 1)"><span class="option-num">1</span> べんきょうします</button>
+            <button class="option-btn" onclick="checkAnswer('m01', 2, 1)"><span class="option-num">2</span> なおします</button>
+            <button class="option-btn" onclick="checkAnswer('m01', 3, 1)"><span class="option-num">3</span> かわります</button>
+          </div>
+          <div id="feedback-m01" class="feedback"></div>
+        </div>
+
+        <!-- M-02 -->
+        <div class="question-box">
+          <div class="question-number">Soal 2 (M-02)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/soal_m02.png" alt="Melarikan diri" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m02', 1, 1)"><span class="option-num">1</span> にげます</button>
+            <button class="option-btn" onclick="checkAnswer('m02', 2, 1)"><span class="option-num">2</span> なげます</button>
+            <button class="option-btn" onclick="checkAnswer('m02', 3, 1)"><span class="option-num">3</span> おきます</button>
+          </div>
+          <div id="feedback-m02" class="feedback"></div>
+        </div>
+
+        <!-- M-03 -->
+        <div class="question-box">
+          <div class="question-number">Soal 3 (M-03)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/soal_m03.png" alt="Menemukan" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m03', 1, 1)"><span class="option-num">1</span> みつけます</button>
+            <button class="option-btn" onclick="checkAnswer('m03', 2, 1)"><span class="option-num">2</span> かけます</button>
+            <button class="option-btn" onclick="checkAnswer('m03', 3, 1)"><span class="option-num">3</span> かみます</button>
+          </div>
+          <div id="feedback-m03" class="feedback"></div>
+        </div>
+
+        <!-- M-04 -->
+        <div class="question-box">
+          <div class="question-number">Soal 4 (M-04)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/soal_m04.png" alt="Berlari" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m04', 1, 1)"><span class="option-num">1</span> はしります</button>
+            <button class="option-btn" onclick="checkAnswer('m04', 2, 1)"><span class="option-num">2</span> あるきます</button>
+            <button class="option-btn" onclick="checkAnswer('m04', 3, 1)"><span class="option-num">3</span> のぼります</button>
+          </div>
+          <div id="feedback-m04" class="feedback"></div>
+        </div>
+
+        <!-- M-05 -->
+        <div class="question-box">
+          <div class="question-number">Soal 5 (M-05)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/soal_m05.png" alt="Bernyanyi" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m05', 1, 1)"><span class="option-num">1</span> うたいます</button>
+            <button class="option-btn" onclick="checkAnswer('m05', 2, 1)"><span class="option-num">2</span> さそいます</button>
+            <button class="option-btn" onclick="checkAnswer('m05', 3, 1)"><span class="option-num">3</span> すきます</button>
+          </div>
+          <div id="feedback-m05" class="feedback"></div>
+        </div>
+
+        <!-- M-06 -->
+        <div class="question-box">
+          <div class="question-number">Soal 6 (M-06)</div>
+          <div class="question-text"><ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>びましょう。</div>
+          <div class="media-container"><img src="assets/images/soal_m06.png" alt="Menarik pintu" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m06', 1, 2)"><span class="option-num">1</span> でかけます</button>
+            <button class="option-btn" onclick="checkAnswer('m06', 2, 2)"><span class="option-num">2</span> ひきます</button>
+            <button class="option-btn" onclick="checkAnswer('m06', 3, 2)"><span class="option-num">3</span> しめます</button>
+          </div>
+          <div id="feedback-m06" class="feedback"></div>
+        </div>
+
+        <!-- M-07 -->
+        <div class="question-box">
+          <div class="question-number">Soal 7 (M-07)</div>
+          <div class="question-text">猫がはこの（ ）で泣いています。</div>
+          <div class="translation">Terjemahan: Kucing menangis di dalam kotak.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m07', 1, 3)"><span class="option-num">1</span> 間（あいだ）</button>
+            <button class="option-btn" onclick="checkAnswer('m07', 2, 3)"><span class="option-num">2</span> 内（うち）</button>
+            <button class="option-btn" onclick="checkAnswer('m07', 3, 3)"><span class="option-num">3</span> 中（なか）</button>
+          </div>
+          <div id="feedback-m07" class="feedback"></div>
+        </div>
+
+        <!-- M-08 -->
+        <div class="question-box">
+          <div class="question-number">Soal 8 (M-08)</div>
+          <div class="question-text">ここは（ ）が便利です。</div>
+          <div class="translation">Terjemahan: Di sini transportasinya praktis.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m08', 1, 3)"><span class="option-num">1</span> 交換（こうかん）</button>
+            <button class="option-btn" onclick="checkAnswer('m08', 2, 3)"><span class="option-num">2</span> 交道</button>
+            <button class="option-btn" onclick="checkAnswer('m08', 3, 3)"><span class="option-num">3</span> 交通（こうつう）</button>
+          </div>
+          <div id="feedback-m08" class="feedback"></div>
+        </div>
+
+        <!-- M-09 -->
+        <div class="question-box">
+          <div class="question-number">Soal 9 (M-09)</div>
+          <div class="question-text">きれいな（ ）が見えます。</div>
+          <div class="translation">Terjemahan: Pemandangan yang indah terlihat.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m09', 1, 2)"><span class="option-num">1</span> 風（かぜ）</button>
+            <button class="option-btn" onclick="checkAnswer('m09', 2, 2)"><span class="option-num">2</span> 景色（けしき）</button>
+            <button class="option-btn" onclick="checkAnswer('m09', 3, 2)"><span class="option-num">3</span> 気色（きしょく）</button>
+          </div>
+          <div id="feedback-m09" class="feedback"></div>
+        </div>
+
+        <!-- M-10 -->
+        <div class="question-box">
+          <div class="question-number">Soal 10 (M-10)</div>
+          <div class="question-text">（財布）を落としてしまいました。</div>
+          <div class="translation">Pilihlah cara baca kanji 財布 (Dompet).</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m10', 1, 2)"><span class="option-num">1</span> さふう</button>
+            <button class="option-btn" onclick="checkAnswer('m10', 2, 2)"><span class="option-num">2</span> さいふ</button>
+            <button class="option-btn" onclick="checkAnswer('m10', 3, 2)"><span class="option-num">3</span> へた</button>
+          </div>
+          <div id="feedback-m10" class="feedback"></div>
+        </div>
+
+        <!-- M-11 -->
+        <div class="question-box">
+          <div class="question-number">Soal 11 (M-11)</div>
+          <div class="question-text">しんぶんでみたい（番組）を探します。</div>
+          <div class="translation">Pilihlah cara baca kanji 番組 (Acara TV).</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m11', 1, 1)"><span class="option-num">1</span> ばんぐみ</button>
+            <button class="option-btn" onclick="checkAnswer('m11', 2, 1)"><span class="option-num">2</span> ばんくみ</button>
+            <button class="option-btn" onclick="checkAnswer('m11', 3, 1)"><span class="option-num">3</span> ばくみ</button>
+          </div>
+          <div id="feedback-m11" class="feedback"></div>
+        </div>
+
+        <!-- M-12 -->
+        <div class="question-box">
+          <div class="question-number">Soal 12 (M-12)</div>
+          <div class="question-text">げんかんに はなを （<ruby>飾<rt>かざ</rt></ruby>ります）</div>
+          <div class="translation">Pilihlah bentuk kata kerja 飾ります (Menghias/Memajang).</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m12', 1, 1)"><span class="option-num">1</span> かざります</button>
+            <button class="option-btn" onclick="checkAnswer('m12', 2, 1)"><span class="option-num">2</span> かじゃります</button>
+            <button class="option-btn" onclick="checkAnswer('m12', 3, 1)"><span class="option-num">3</span> がざります</button>
+          </div>
+          <div id="feedback-m12" class="feedback"></div>
+        </div>
+
+        <!-- M-13 -->
+        <div class="question-box">
+          <div class="question-number">Soal 13 (M-13)</div>
+          <div class="question-text">つごうが（ ）なら、らいしゅうにしましょう。</div>
+          <div class="translation">Terjemahan: Jika jadwalnya tidak memungkinkan, mari buat minggu depan.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m13', 1, 2)"><span class="option-num">1</span> いや（嫌）</button>
+            <button class="option-btn" onclick="checkAnswer('m13', 2, 2)"><span class="option-num">2</span> わるい（悪い）</button>
+            <button class="option-btn" onclick="checkAnswer('m13', 3, 2)"><span class="option-num">3</span> きらい（嫌い）</button>
+          </div>
+          <div id="feedback-m13" class="feedback"></div>
+        </div>
+
+        <!-- M-14 -->
+        <div class="question-box">
+          <div class="question-number">Soal 14 (M-14)</div>
+          <div class="question-text">はるなのに とても あつい です。なつの（ ）です。</div>
+          <div class="translation">Terjemahan: Meskipun musim semi sangat panas. Rasanya seperti musim panas.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m14', 1, 1)"><span class="option-num">1</span> よう</button>
+            <button class="option-btn" onclick="checkAnswer('m14', 2, 1)"><span class="option-num">2</span> こと</button>
+            <button class="option-btn" onclick="checkAnswer('m14', 3, 1)"><span class="option-num">3</span> つもり</button>
+          </div>
+          <div id="feedback-m14" class="feedback"></div>
+        </div>
+
+        <!-- M-15 -->
+        <div class="question-box">
+          <div class="question-number">Soal 15 (M-15)</div>
+          <div class="question-text">かべに 大きな カレンダーが（ ）あります。</div>
+          <div class="translation">Terjemahan: Di dinding ada kalender besar yang digantungkan.</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('m15', 1, 2)"><span class="option-num">1</span> でて</button>
+            <button class="option-btn" onclick="checkAnswer('m15', 2, 2)"><span class="option-num">2</span> かけて</button>
+            <button class="option-btn" onclick="checkAnswer('m15', 3, 2)"><span class="option-num">3</span> しめて</button>
+          </div>
+          <div id="feedback-m15" class="feedback"></div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Pilihan Jawaban -->
-    <div class="options-container">
-      <button class="option-btn" onclick="checkAnswer(1)">
-        <span class="option-num">1</span> べんきょうします
-      </button>
-      <button class="option-btn" onclick="checkAnswer(2)">
-        <span class="option-num">2</span> なおします
-      </button>
-      <button class="option-btn" onclick="checkAnswer(3)">
-        <span class="option-num">3</span> かわります
-      </button>
+    <!-- ==================== SESI 2: KAIWA (12 SOAL) ==================== -->
+    <div id="kaiwa" class="tab-content">
+      <div class="quiz-card">
+        <h2 class="section-title">Sesi 2: 会話 (Kaiwa / Percakapan - 12 Soal)</h2>
+
+        <!-- K-01 -->
+        <div class="question-box">
+          <div class="question-number">Soal 1 (K-01)</div>
+          <div class="question-text">
+            A : 発表の準備はできましたか。<br>
+            B : えーと、まだ資料をコピーしていません。（ ）コピーしようと思っています。<br>
+            A : 手伝いましょうか。<br>
+            B : 大丈夫です。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k01', 1, 3)"><span class="option-num">1</span> ですけど</button>
+            <button class="option-btn" onclick="checkAnswer('k01', 2, 3)"><span class="option-num">2</span> ところ</button>
+            <button class="option-btn" onclick="checkAnswer('k01', 3, 3)"><span class="option-num">3</span> これから</button>
+          </div>
+          <div id="feedback-k01" class="feedback"></div>
+        </div>
+
+        <!-- K-02 -->
+        <div class="question-box">
+          <div class="question-number">Soal 2 (K-02)</div>
+          <div class="question-text">
+            A : 手伝いましょうか。<br>
+            B : ええ、お願いします。お皿やコップは（ ）。<br>
+            A : 台所へ持って行っておいてください。<br>
+            B : 分かりました。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k02', 1, 3)"><span class="option-num">1</span> どんなでしょうか</button>
+            <button class="option-btn" onclick="checkAnswer('k02', 2, 3)"><span class="option-num">2</span> どうでしたか</button>
+            <button class="option-btn" onclick="checkAnswer('k02', 3, 3)"><span class="option-num">3</span> どうしましょうか</button>
+          </div>
+          <div id="feedback-k02" class="feedback"></div>
+        </div>
+
+        <!-- K-03 -->
+        <div class="question-box">
+          <div class="question-number">Soal 3 (K-03)</div>
+          <div class="question-text">
+            A : どうしたんですか。<br>
+            B :（ ）財布を落としてしまったんです。<br>
+            A : それは大変ですね。すぐ交番に行かないと。<br>
+            B : ええ。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k03', 1, 3)"><span class="option-num">1</span> どこかを</button>
+            <button class="option-btn" onclick="checkAnswer('k03', 2, 3)"><span class="option-num">2</span> どこかも</button>
+            <button class="option-btn" onclick="checkAnswer('k03', 3, 3)"><span class="option-num">3</span> どこかで</button>
+          </div>
+          <div id="feedback-k03" class="feedback"></div>
+        </div>
+
+        <!-- K-04 -->
+        <div class="question-box">
+          <div class="question-number">Soal 4 (K-04)</div>
+          <div class="question-text">
+            A : ずいぶん人が多いですね。<br>
+            B : ええ。ここはコーヒーがおいしいし、食事もできるし。。。。<br>
+            A :（ ）人気があるんですね。<br>
+            B : そうですね。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k04', 1, 3)"><span class="option-num">1</span> それに</button>
+            <button class="option-btn" onclick="checkAnswer('k04', 2, 3)"><span class="option-num">2</span> それから</button>
+            <button class="option-btn" onclick="checkAnswer('k04', 3, 3)"><span class="option-num">3</span> それで</button>
+          </div>
+          <div id="feedback-k04" class="feedback"></div>
+        </div>
+
+        <!-- K-05 -->
+        <div class="question-box">
+          <div class="question-number">Soal 5 (K-05)</div>
+          <div class="question-text">
+            A : あのう、こちらで料理教室が開けますか。<br>
+            B : ええ、3階にキッチンがあります。<br>
+            A : どうぐも（ ）。<br>
+            B : ええ。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k05', 1, 2)"><span class="option-num">1</span> 借りることがありますか</button>
+            <button class="option-btn" onclick="checkAnswer('k05', 2, 2)"><span class="option-num">2</span> 借りられますか</button>
+            <button class="option-btn" onclick="checkAnswer('k05', 3, 2)"><span class="option-num">3</span> 借り出来ますか</button>
+          </div>
+          <div id="feedback-k05" class="feedback"></div>
+        </div>
+
+        <!-- K-06 -->
+        <div class="question-box">
+          <div class="question-number">Soal 6 (K-06)</div>
+          <div class="question-text">
+            A : すてきなぼうしですね。どこで買ったんですか。<br>
+            B : これですか。エドヤストアで買いました。<br>
+            A : すみませんが、店の場所を（ ）。<br>
+            B : ええ、いいですよ。<br>
+            A : ありがとうございます。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k06', 1, 3)"><span class="option-num">1</span> 教えてさせていただけませんか</button>
+            <button class="option-btn" onclick="checkAnswer('k06', 2, 3)"><span class="option-num">2</span> 教えてさせていただきませんか</button>
+            <button class="option-btn" onclick="checkAnswer('k06', 3, 3)"><span class="option-num">3</span> 教えていただけませんか</button>
+          </div>
+          <div id="feedback-k06" class="feedback"></div>
+        </div>
+
+        <!-- K-07 -->
+        <div class="question-box">
+          <div class="question-number">Soal 7 (K-07)</div>
+          <div class="question-text">
+            A : 子どもを（ ）、お金がかかりますね。<br>
+            B : ええ、そうですね。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k07', 1, 2)"><span class="option-num">1</span> 育てのに</button>
+            <button class="option-btn" onclick="checkAnswer('k07', 2, 2)"><span class="option-num">2</span> 育てるのに</button>
+            <button class="option-btn" onclick="checkAnswer('k07', 3, 2)"><span class="option-num">3</span> 育てたのに</button>
+          </div>
+          <div id="feedback-k07" class="feedback"></div>
+        </div>
+
+        <!-- K-08 -->
+        <div class="question-box">
+          <div class="question-number">Soal 8 (K-08)</div>
+          <div class="question-text">
+            A : 今朝のテレビを見ましたか。神戸で地震があったそうです。<br>
+            B : えっ？<br>
+            A : かなり大きかったようですよ。建物が（ ）。<br>
+            B : えーっ。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k08', 1, 3)"><span class="option-num">1</span> たくさん折れた</button>
+            <button class="option-btn" onclick="checkAnswer('k08', 2, 3)"><span class="option-num">2</span> たくさん倒しました</button>
+            <button class="option-btn" onclick="checkAnswer('k08', 3, 3)"><span class="option-num">3</span> たくさん倒れました</button>
+          </div>
+          <div id="feedback-k08" class="feedback"></div>
+        </div>
+
+        <!-- K-09 -->
+        <div class="question-box">
+          <div class="question-number">Soal 9 (K-09)</div>
+          <div class="question-text">
+            A : IMCの漢字のソフトを知っていますか。<br>
+            B : ええ、日本語を（ ）のソフトでしょう。<br>
+            A : とても いいそうですね。<br>
+            B : 私も買いたいと思っているんです。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k09', 1, 1)"><span class="option-num">1</span> 勉強する人のため</button>
+            <button class="option-btn" onclick="checkAnswer('k09', 2, 1)"><span class="option-num">2</span> 勉強して人のため</button>
+            <button class="option-btn" onclick="checkAnswer('k09', 3, 1)"><span class="option-num">3</span> 勉強した人であため</button>
+          </div>
+          <div id="feedback-k09" class="feedback"></div>
+        </div>
+
+        <!-- K-10 -->
+        <div class="question-box">
+          <div class="question-number">Soal 10 (K-10)</div>
+          <div class="question-text">
+            A : どうしたんですか。<br>
+            B : パソコンが故障したんです。1週間前に、買ったばかりなのに。。。<br>
+            A : 買った店に連絡して、（ ）ですよ。<br>
+            B : そうですね。すぐ連絡してみます。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k10', 1, 1)"><span class="option-num">1</span> 見てもらったほうがいい</button>
+            <button class="option-btn" onclick="checkAnswer('k10', 2, 1)"><span class="option-num">2</span> 見てあげたほうがいい</button>
+            <button class="option-btn" onclick="checkAnswer('k10', 3, 1)"><span class="option-num">3</span> 見なくてもいいですか</button>
+          </div>
+          <div id="feedback-k10" class="feedback"></div>
+        </div>
+
+        <!-- K-11 -->
+        <div class="question-box">
+          <div class="question-number">Soal 11 (K-11)</div>
+          <div class="question-text">
+            A : すみません、この書類を（ ）。<br>
+            B : はい、いいですよ。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k11', 1, 1)"><span class="option-num">1</span> 見ていただけませんか</button>
+            <button class="option-btn" onclick="checkAnswer('k11', 2, 1)"><span class="option-num">2</span> 見てあげてください</button>
+            <button class="option-btn" onclick="checkAnswer('k11', 3, 1)"><span class="option-num">3</span> 見なくてもいいですか</button>
+          </div>
+          <div id="feedback-k11" class="feedback"></div>
+        </div>
+
+        <!-- K-12 -->
+        <div class="question-box">
+          <div class="question-number">Soal 12 (K-12)</div>
+          <div class="question-text">
+            A : 昨日（きのう）のニュースを見（み）て（ ）気持ち（きもち）になりました。<br>
+            B : はい、私（わたし）もとても心（こころ）が痛（いた）みました。
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('k12', 1, 2)"><span class="option-num">1</span> 寂しい（さびしい）</button>
+            <button class="option-btn" onclick="checkAnswer('k12', 2, 2)"><span class="option-num">2</span> 悲しい（かなしい）</button>
+            <button class="option-btn" onclick="checkAnswer('k12', 3, 2)"><span class="option-num">3</span> 苦しい（くるしい）</button>
+          </div>
+          <div id="feedback-k12" class="feedback"></div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Pesan Feedback Hasil -->
-    <div id="feedback"></div>
+    <!-- ==================== SESI 3: CHOUKAI (14 SOAL WITH TTS) ==================== -->
+    <div id="choukai" class="tab-content">
+      <div class="quiz-card">
+        <h2 class="section-title">Sesi 3: 聴解 (Choukai / Pendengaran - 14 Soal)</h2>
+
+        <!-- C-01 -->
+        <div class="question-box">
+          <div class="question-number">Soal 1 (C-01)</div>
+          <div class="question-text">Laki-laki itu pergi ke mana? (会話を聞いて、選んでください)</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：日曜日、何をする？ 女：友達の家に行って、いっしょにゲームをしようと思っています。 男：いいですね。 質問：男の人はどこに行きますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c01', 1, 1)"><span class="option-num">1</span> 友達のうち (Rumah teman)</button>
+            <button class="option-btn" onclick="checkAnswer('c01', 2, 1)"><span class="option-num">2</span> 友達といっしょに学校</button>
+            <button class="option-btn" onclick="checkAnswer('c01', 3, 1)"><span class="option-num">3</span> 友達とモールに行く</button>
+          </div>
+          <div id="feedback-c01" class="feedback"></div>
+        </div>
+
+        <!-- C-02 -->
+        <div class="question-box">
+          <div class="question-number">Soal 2 (C-02)</div>
+          <div class="question-text">Ada apa di dekat rumah wanita tersebut?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：家はどこですか。 女：私の家は川の近くにあります。静かでいいところですよ。 質問：女の人の家の近くに何がありますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c02', 1, 2)"><span class="option-num">1</span> うみがちかくにあります</button>
+            <button class="option-btn" onclick="checkAnswer('c02', 2, 2)"><span class="option-num">2</span> かわがちかくにあります</button>
+            <button class="option-btn" onclick="checkAnswer('c02', 3, 2)"><span class="option-num">3</span> やまがちかくにあります</button>
+          </div>
+          <div id="feedback-c02" class="feedback"></div>
+        </div>
+
+        <!-- C-03 -->
+        <div class="question-box">
+          <div class="question-number">Soal 3 (C-03)</div>
+          <div class="question-text">Perempuan tersebut pergi ke supermarket hari apa? (Hari daging murah)</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：あのう、このスーパーの肉が安い日は何曜日ですか。 女：ええと、月曜日ですよ。毎週月曜日は安くなります。 男：そうですか。じゃあ、月曜日に来ます。 質問：女の人は何曜日にスーパーに行きますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c03', 1, 2)"><span class="option-num">1</span> どようびです</button>
+            <button class="option-btn" onclick="checkAnswer('c03', 2, 2)"><span class="option-num">2</span> げつようびです</button>
+            <button class="option-btn" onclick="checkAnswer('c03', 3, 2)"><span class="option-num">3</span> にちようびです</button>
+          </div>
+          <div id="feedback-c03" class="feedback"></div>
+        </div>
+
+        <!-- C-04 -->
+        <div class="question-box">
+          <div class="question-number">Soal 4 (C-04)</div>
+          <div class="question-text">Bus yang ke Bandara Fukuoka nomor berapa?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('女：すみません、福岡空港行きのバスはどれですか。 男：空港行きは54番のバスですよ。あちらの乗り場です。 女：ありがとうございます。 質問：福岡空港行きのバスは何番ですか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c04', 1, 2)"><span class="option-num">1</span> NOMOR 53</button>
+            <button class="option-btn" onclick="checkAnswer('c04', 2, 2)"><span class="option-num">2</span> NOMOR 54</button>
+            <button class="option-btn" onclick="checkAnswer('c04', 3, 2)"><span class="option-num">3</span> NOMOR 58</button>
+          </div>
+          <div id="feedback-c04" class="feedback"></div>
+        </div>
+
+        <!-- C-05 -->
+        <div class="question-box">
+          <div class="question-number">Soal 5 (C-05)</div>
+          <div class="question-text">Hari ini aktivitasnya selain gym, melakukan apa?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('女：今日はジムで運動しましたね。この後どうしますか。 男：そうですね。少しジョギングをしてから帰ります。 質問：今日はジムのほかに、何をしますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c05', 1, 1)"><span class="option-num">1</span> ジョギング (Joging)</button>
+            <button class="option-btn" onclick="checkAnswer('c05', 2, 1)"><span class="option-num">2</span> ジム (Gym)</button>
+            <button class="option-btn" onclick="checkAnswer('c05', 3, 1)"><span class="option-num">3</span> つり (Mancing)</button>
+          </div>
+          <div id="feedback-c05" class="feedback"></div>
+        </div>
+
+        <!-- C-06 -->
+        <div class="question-box">
+          <div class="question-number">Soal 6 (C-06)</div>
+          <div class="question-text">Ada di mana perempuannya?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：田中さん、今どこにいますか。 女：今、事務所にいます。書類の整理をしています。 質問：女の人はどこにいますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c06', 1, 2)"><span class="option-num">1</span> Pasar / Supermarket</button>
+            <button class="option-btn" onclick="checkAnswer('c06', 2, 2)"><span class="option-num">2</span> Kantor (事務所)</button>
+            <button class="option-btn" onclick="checkAnswer('c06', 3, 2)"><span class="option-num">3</span> Salon (美容院)</button>
+          </div>
+          <div id="feedback-c06" class="feedback"></div>
+        </div>
+
+        <!-- C-07 -->
+        <div class="question-box">
+          <div class="question-number">Soal 7 (C-07)</div>
+          <div class="question-text">Berapa jumlah apel dan telur yang dibeli?</div>
+          <div class="media-container"><img src="assets/images/soal_c07.png" alt="Apel & Telur" class="quiz-image"></div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('店員：いらっしゃいませ。 客：りんごをみっつと、たまごをふたつ、お願いします。 店員：はい、りんごみっつとたまごふたつですね。合計で800円になります。 質問：りんごとたまごはいくつですか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c07', 1, 1)"><span class="option-num">1</span> りんごみっつとたまごふたつ (3 Apel & 2 Telur)</button>
+            <button class="option-btn" onclick="checkAnswer('c07', 2, 1)"><span class="option-num">2</span> ８００円</button>
+            <button class="option-btn" onclick="checkAnswer('c07', 3, 1)"><span class="option-num">3</span> りんごふたつとなつみっつ</button>
+          </div>
+          <div id="feedback-c07" class="feedback"></div>
+        </div>
+
+        <!-- C-08 -->
+        <div class="question-box">
+          <div class="question-number">Soal 8 (C-08)</div>
+          <div class="question-text">Jam berapa pengumumannya?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('アナウンス：皆様にお知らせします。次の案内は、午後3時55分に行います。 質問：アナウンスは何時ですか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c08', 1, 3)"><span class="option-num">1</span> JAM 04.55</button>
+            <button class="option-btn" onclick="checkAnswer('c08', 2, 3)"><span class="option-num">2</span> JAM 02.55</button>
+            <button class="option-btn" onclick="checkAnswer('c08', 3, 3)"><span class="option-num">3</span> JAM 03.55 (3時55分)</button>
+          </div>
+          <div id="feedback-c08" class="feedback"></div>
+        </div>
+
+        <!-- C-09 -->
+        <div class="question-box">
+          <div class="question-number">Soal 9 (C-09)</div>
+          <div class="question-text">Apa yang dilakukan Maria?</div>
+          <div class="media-container"><img src="assets/images/soal_c09.png" alt="Mesin Fotokopi" class="quiz-image"></div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：マリアさん、何をしていますか。 女：コピー室のコピー機をチェックしています。調子が悪いです。 質問：マリアさんは何をしていますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c09', 1, 3)"><span class="option-num">1</span> Mengecek ruang kantor</button>
+            <button class="option-btn" onclick="checkAnswer('c09', 2, 3)"><span class="option-num">2</span> Mengecek email</button>
+            <button class="option-btn" onclick="checkAnswer('c09', 3, 3)"><span class="option-num">3</span> Mengecek ruang fotokopi</button>
+          </div>
+          <div id="feedback-c09" class="feedback"></div>
+        </div>
+
+        <!-- C-10 -->
+        <div class="question-box">
+          <div class="question-number">Soal 10 (C-10)</div>
+          <div class="question-text">Makanan apa yang akhirnya dipesan?</div>
+          <div class="media-container"><img src="assets/images/soal_c10.png" alt="Sushi & Miso" class="quiz-image"></div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('店員：ご注文はお決まりですか。 客：そうですね…寿司セットと、そばをお願いします。 店員：すみません、今日のそばはもう売り切れてしまいました。 客：あ、そうですか。じゃあ、そばの代わりに温かいみそ汁にします。 質問：女の人は何を注文しますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c10', 1, 3)"><span class="option-num">1</span> Set sushi dan tatakan miso putih</button>
+            <button class="option-btn" onclick="checkAnswer('c10', 2, 3)"><span class="option-num">2</span> Onigiri dan karage</button>
+            <button class="option-btn" onclick="checkAnswer('c10', 3, 3)"><span class="option-num">3</span> Set sushi dan atatakai miso</button>
+          </div>
+          <div id="feedback-c10" class="feedback"></div>
+        </div>
+
+        <!-- C-11 -->
+        <div class="question-box">
+          <div class="question-number">Soal 11 (C-11)</div>
+          <div class="question-text">Percakapan persiapan rapat. Apa yang dilakukan oleh si laki-laki?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('女：会議の準備をしましょう。私は資料を用意します。 男：わかりました。じゃあ、私は会議室をチェックしてきます。 質問：男の人は何をしますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c11', 1, 2)"><span class="option-num">1</span> Mengecek proyektor</button>
+            <button class="option-btn" onclick="checkAnswer('c11', 2, 2)"><span class="option-num">2</span> Mengecek ruang rapat</button>
+            <button class="option-btn" onclick="checkAnswer('c11', 3, 2)"><span class="option-num">3</span> Mengecek komputer</button>
+          </div>
+          <div id="feedback-c11" class="feedback"></div>
+        </div>
+
+        <!-- C-12 -->
+        <div class="question-box">
+          <div class="question-number">Soal 12 (C-12)</div>
+          <div class="question-text">Apa yang dilakukan perempuannya?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('男：来週のミーティングの準備を伝えます。書類の準備をお願いします。 女：わかりました。すぐに書類を用意します。 質問：女の人は何をしますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c12', 1, 2)"><span class="option-num">1</span> Menyiapkan makanan</button>
+            <button class="option-btn" onclick="checkAnswer('c12', 2, 2)"><span class="option-num">2</span> Menyiapkan dokumen</button>
+            <button class="option-btn" onclick="checkAnswer('c12', 3, 2)"><span class="option-num">3</span> Menyiapkan kursi</button>
+          </div>
+          <div id="feedback-c12" class="feedback"></div>
+        </div>
+
+        <!-- C-13 -->
+        <div class="question-box">
+          <div class="question-number">Soal 13 (C-13)</div>
+          <div class="question-text">Obat yang putih, 1 hari diminum berapa kali?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('医者：薬を説明しますね。青い薬は1日3回、この白い薬は1日2回飲んでください。 患者：はい、白い薬は1日2回ですね。分かりました。 質問：白い薬は1日に何回飲みますか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c13', 1, 2)"><span class="option-num">1</span> 3かい (3 kali)</button>
+            <button class="option-btn" onclick="checkAnswer('c13', 2, 2)"><span class="option-num">2</span> 2かい (2 kali)</button>
+            <button class="option-btn" onclick="checkAnswer('c13', 3, 2)"><span class="option-num">3</span> 4かい (4 kali)</button>
+          </div>
+          <div id="feedback-c13" class="feedback"></div>
+        </div>
+
+        <!-- C-14 -->
+        <div class="question-box">
+          <div class="question-number">Soal 14 (C-14)</div>
+          <div class="question-text">Tempat menyimpan obat yang benar, kecuali?</div>
+          <div class="media-container">
+            <button class="speaker-btn" onclick="playAudio('医者：薬の保管についてです。涼しい場所や冷蔵庫に置いてください。暑い場所や窓の近くには絶対に置かないでください。 質問：薬を置く場所として正しくないものはどれですか。')">
+              🔊 Putar Audio Percakapan
+            </button>
+          </div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('c14', 1, 3)"><span class="option-num">1</span> Di kulkas</button>
+            <button class="option-btn" onclick="checkAnswer('c14', 2, 3)"><span class="option-num">2</span> Di tempat dingin</button>
+            <button class="option-btn" onclick="checkAnswer('c14', 3, 3)"><span class="option-num">3</span> Tempat yang panas dan dekat jendela</button>
+          </div>
+          <div id="feedback-c14" class="feedback"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== SESI 4: DOKKAI (17 SOAL) ==================== -->
+    <div id="dokkai" class="tab-content">
+      <div class="quiz-card">
+        <h2 class="section-title">Sesi 4: 読解 (Dokkai / Membaca - 17 Soal)</h2>
+
+        <!-- TEKS A -->
+        <div class="reading-box">
+          <strong>【テキスト A: 田中さんのメッセージ】</strong><br>
+          今日、私（田中）は熱を出したので、明日病院に行くつもりです。<br>
+          実は、明日の予定は映画館で映画を見ることでした。<br>
+          来週に変えても大丈夫でしょうか。本当に申し訳ありません。
+        </div>
+
+        <!-- D-01 -->
+        <div class="question-box">
+          <div class="question-number">Soal 1 (D-01)</div>
+          <div class="question-text">Kapan Saudara Tanaka pergi menonton film?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d01', 1, 3)"><span class="option-num">1</span> 明日です</button>
+            <button class="option-btn" onclick="checkAnswer('d01', 2, 3)"><span class="option-num">2</span> 今週です</button>
+            <button class="option-btn" onclick="checkAnswer('d01', 3, 3)"><span class="option-num">3</span> 来週です</button>
+          </div>
+          <div id="feedback-d01" class="feedback"></div>
+        </div>
+
+        <!-- D-15 -->
+        <div class="question-box">
+          <div class="question-number">Soal 2 (D-15)</div>
+          <div class="question-text">いつ田中さんは映画を見ますか。(Sesuai teks Tanaka)</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d15', 1, 3)"><span class="option-num">1</span> 来年</button>
+            <button class="option-btn" onclick="checkAnswer('d15', 2, 3)"><span class="option-num">2</span> 来月</button>
+            <button class="option-btn" onclick="checkAnswer('d15', 3, 3)"><span class="option-num">3</span> 来週</button>
+          </div>
+          <div id="feedback-d15" class="feedback"></div>
+        </div>
+
+        <!-- D-16 -->
+        <div class="question-box">
+          <div class="question-number">Soal 3 (D-16)</div>
+          <div class="question-text">田中さんはどうして病院に行きますか。</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d16', 1, 1)"><span class="option-num">1</span> ねつ (Demam)</button>
+            <button class="option-btn" onclick="checkAnswer('d16', 2, 1)"><span class="option-num">2</span> のどがいたい</button>
+            <button class="option-btn" onclick="checkAnswer('d16', 3, 1)"><span class="option-num">3</span> おなかいたい</button>
+          </div>
+          <div id="feedback-d16" class="feedback"></div>
+        </div>
+
+        <!-- TEKS B -->
+        <div class="reading-box">
+          <strong>【テキスト B: 冷蔵庫のお知らせ】</strong><br>
+          さいきん冷蔵庫からくさいにおいがありました。調べてみると、冷蔵庫の中にくさいにおいが分かりました。そして冷蔵庫を開けるとくさいバナナが入っていました。それからバナナを捨てました。自分の食べ物には名前を書いてください。
+        </div>
+
+        <!-- D-02 -->
+        <div class="question-box">
+          <div class="question-number">Soal 4 (D-02)</div>
+          <div class="question-text">Cerita tentang bau di kulkas berbicara tentang apa?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d02', 1, 3)"><span class="option-num">1</span> においがいい</button>
+            <button class="option-btn" onclick="checkAnswer('d02', 2, 3)"><span class="option-num">2</span> 美味しい</button>
+            <button class="option-btn" onclick="checkAnswer('d02', 3, 3)"><span class="option-num">3</span> においがよくない</button>
+          </div>
+          <div id="feedback-d02" class="feedback"></div>
+        </div>
+
+        <!-- D-03 -->
+        <div class="question-box">
+          <div class="question-number">Soal 5 (D-03)</div>
+          <div class="question-text">Apa yang dilakukan agar barang tidak hilang/berbau busuk?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d03', 1, 3)"><span class="option-num">1</span> MENULIS NAMA PADA BARANG (APEL)</button>
+            <button class="option-btn" onclick="checkAnswer('d03', 2, 3)"><span class="option-num">2</span> MENULIS NAMA PADA BARANG (MANGGA)</button>
+            <button class="option-btn" onclick="checkAnswer('d03', 3, 3)"><span class="option-num">3</span> MENULIS NAMA PADA BARANG (PISANG) + なまえ</button>
+          </div>
+          <div id="feedback-d03" class="feedback"></div>
+        </div>
+
+        <!-- D-13 -->
+        <div class="question-box">
+          <div class="question-number">Soal 6 (D-13)</div>
+          <div class="question-text">におわないようにするにはどうすればいいですか？</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d13', 1, 1)"><span class="option-num">1</span> バナナを捨てます</button>
+            <button class="option-btn" onclick="checkAnswer('d13', 2, 1)"><span class="option-num">2</span> バナナを食べる</button>
+            <button class="option-btn" onclick="checkAnswer('d13', 3, 1)"><span class="option-num">3</span> バナナを買う</button>
+          </div>
+          <div id="feedback-d13" class="feedback"></div>
+        </div>
+
+        <!-- D-14 -->
+        <div class="question-box">
+          <div class="question-number">Soal 7 (D-14)</div>
+          <div class="question-text">何について書いてありますか。</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d14', 1, 1)"><span class="option-num">1</span> においがよくない</button>
+            <button class="option-btn" onclick="checkAnswer('d14', 2, 1)"><span class="option-num">2</span> いいにおいがある</button>
+            <button class="option-btn" onclick="checkAnswer('d14', 3, 1)"><span class="option-num">3</span> バナナすき</button>
+          </div>
+          <div id="feedback-d14" class="feedback"></div>
+        </div>
+
+        <!-- TEKS C -->
+        <div class="reading-box">
+          <strong>【テキスト C: 日本語クラスのポスター】</strong><br>
+          私たちの日本語クラスは今月始まります。日本語の授業は週に1回行われます。<br>
+          日時：毎週月曜日 午後1時から3時まで (13:00〜15:00)<br>
+          開始日：十一月二十二日<br>
+          道具は自分で持って来てください。皆参加してください。
+        </div>
+
+        <!-- D-05 -->
+        <div class="question-box">
+          <div class="question-number">Soal 8 (D-05)</div>
+          <div class="question-text">Berapa lama kelas Bahasa Jepangnya?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d05', 1, 3)"><span class="option-num">1</span> 4 JAM (17.00 - 18.00)</button>
+            <button class="option-btn" onclick="checkAnswer('d05', 2, 3)"><span class="option-num">2</span> 3 JAM (16.00 - 17.00)</button>
+            <button class="option-btn" onclick="checkAnswer('d05', 3, 3)"><span class="option-num">3</span> 2 JAM (13.00 - 15.00)</button>
+          </div>
+          <div id="feedback-d05" class="feedback"></div>
+        </div>
+
+        <!-- D-11 -->
+        <div class="question-box">
+          <div class="question-number">Soal 9 (D-11)</div>
+          <div class="question-text">いつからクラスが始まりますか。</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d11', 1, 3)"><span class="option-num">1</span> １１月２３日</button>
+            <button class="option-btn" onclick="checkAnswer('d11', 2, 3)"><span class="option-num">2</span> １０月２２日</button>
+            <button class="option-btn" onclick="checkAnswer('d11', 3, 3)"><span class="option-num">3</span> １１月２２日</button>
+          </div>
+          <div id="feedback-d11" class="feedback"></div>
+        </div>
+
+        <!-- D-12 -->
+        <div class="question-box">
+          <div class="question-number">Soal 10 (D-12)</div>
+          <div class="question-text">日本語クラスは何時間かかりますか。</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d12', 1, 2)"><span class="option-num">1</span> 一時間</button>
+            <button class="option-btn" onclick="checkAnswer('d12', 2, 2)"><span class="option-num">2</span> 二時間</button>
+            <button class="option-btn" onclick="checkAnswer('d12', 3, 2)"><span class="option-num">3</span> 三時間</button>
+          </div>
+          <div id="feedback-d12" class="feedback"></div>
+        </div>
+
+        <!-- D-17 -->
+        <div class="question-box">
+          <div class="question-number">Soal 11 (D-17)</div>
+          <div class="question-text">Kelas bahasa Jepang (jadwal malam) sampai jam berapa?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d17', 1, 3)"><span class="option-num">1</span> 18.00</button>
+            <button class="option-btn" onclick="checkAnswer('d17', 2, 3)"><span class="option-num">2</span> 19.00</button>
+            <button class="option-btn" onclick="checkAnswer('d17', 3, 3)"><span class="option-num">3</span> 20.00</button>
+          </div>
+          <div id="feedback-d17" class="feedback"></div>
+        </div>
+
+        <!-- SOAL BACAAN MANDIRI -->
+
+        <!-- D-04 -->
+        <div class="question-box">
+          <div class="question-number">Soal 12 (D-04)</div>
+          <div class="question-text">DENAH LANTAI 1 DAN LANTAI 2： トイレはどこにありますか？</div>
+          <div class="media-container"><img src="assets/images/soal_d04.png" alt="Denah Toilet" class="quiz-image"></div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d04', 1, 1)"><span class="option-num">1</span> １かいと２かい</button>
+            <button class="option-btn" onclick="checkAnswer('d04', 2, 1)"><span class="option-num">2</span> １かいと3かい</button>
+            <button class="option-btn" onclick="checkAnswer('d04', 3, 1)"><span class="option-num">3</span> 2かいと1かい</button>
+          </div>
+          <div id="feedback-d04" class="feedback"></div>
+        </div>
+
+        <!-- D-06 -->
+        <div class="question-box">
+          <div class="question-number">Soal 13 (D-06)</div>
+          <div class="question-text">Ada cerita perempuan di kantor disuruh datang ke ruang pertemuan. Perempuan tersebut melakukan apa?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d06', 1, 3)"><span class="option-num">1</span> DATANG KE RUANG RESEPSIONIS</button>
+            <button class="option-btn" onclick="checkAnswer('d06', 2, 3)"><span class="option-num">2</span> DATANG KE RUANG KANTOR</button>
+            <button class="option-btn" onclick="checkAnswer('d06', 3, 3)"><span class="option-num">3</span> DATANG KE RUANG PERTEMUAN (会議室)</button>
+          </div>
+          <div id="feedback-d06" class="feedback"></div>
+        </div>
+
+        <!-- D-07 -->
+        <div class="question-box">
+          <div class="question-number">Soal 14 (D-07)</div>
+          <div class="question-text">何時にしますか？ (Janji temu)</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d07', 1, 1)"><span class="option-num">1</span> １１時です</button>
+            <button class="option-btn" onclick="checkAnswer('d07', 2, 1)"><span class="option-num">2</span> 12 時です</button>
+            <button class="option-btn" onclick="checkAnswer('d07', 3, 1)"><span class="option-num">3</span> １３時です</button>
+          </div>
+          <div id="feedback-d07" class="feedback"></div>
+        </div>
+
+        <!-- D-08 -->
+        <div class="question-box">
+          <div class="question-number">Soal 15 (D-08)</div>
+          <div class="question-text">JADWAL RUANGAN: Resepsionisnya buka sampai jam berapa?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d08', 1, 1)"><span class="option-num">1</span> JAM 17：００</button>
+            <button class="option-btn" onclick="checkAnswer('d08', 2, 1)"><span class="option-num">2</span> JAM 14：００</button>
+            <button class="option-btn" onclick="checkAnswer('d08', 3, 1)"><span class="option-num">3</span> JAM 13：０0</button>
+          </div>
+          <div id="feedback-d08" class="feedback"></div>
+        </div>
+
+        <!-- D-09 -->
+        <div class="question-box">
+          <div class="question-number">Soal 16 (D-09)</div>
+          <div class="question-text">Di mana biasanya makan?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d09', 1, 1)"><span class="option-num">1</span> やよい軒 (Yayoi-ken)</button>
+            <button class="option-btn" onclick="checkAnswer('d09', 2, 1)"><span class="option-num">2</span> ケンタッキー (KFC)</button>
+            <button class="option-btn" onclick="checkAnswer('d09', 3, 1)"><span class="option-num">3</span> 株式会社 (Perusahaan)</button>
+          </div>
+          <div id="feedback-d09" class="feedback"></div>
+        </div>
+
+        <!-- D-10 -->
+        <div class="question-box">
+          <div class="question-number">Soal 17 (D-10)</div>
+          <div class="question-text">Harus masuk ke kereta jam berapa?</div>
+          <div class="options-container">
+            <button class="option-btn" onclick="checkAnswer('d10', 1, 3)"><span class="option-num">1</span> JAM 14:30</button>
+            <button class="option-btn" onclick="checkAnswer('d10', 2, 3)"><span class="option-num">2</span> JAM 16:30</button>
+            <button class="option-btn" onclick="checkAnswer('d10', 3, 3)"><span class="option-num">3</span> JAM 17:30</button>
+          </div>
+          <div id="feedback-d10" class="feedback"></div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-  <!-- Logika JS Sederhana -->
+  <!-- JavaScript Logika Tab, TTS Audio, dan Pemeriksa Jawaban -->
   <script>
-    // Jawaban yang benar adalah pilihan nomor 1 (べんきょうします)
-    const correctAnswer = 1;
+    function openTab(tabId) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
 
-    function checkAnswer(selectedOption) {
-      const feedbackDiv = document.getElementById('feedback');
-      feedbackDiv.style.display = 'block';
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
 
-      if (selectedOption === correctAnswer) {
-        feedbackDiv.className = 'correct';
-        feedbackDiv.innerHTML = '⭕ 正解 (Seikai)! Jawaban benar.';
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function playAudio(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Hentikan audio yang sedang berjalan jika ada
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.85; // Kecepatan ideal A2
+
+        window.speechSynthesis.speak(utterance);
       } else {
-        feedbackDiv.className = 'incorrect';
-        feedbackDiv.innerHTML = '❌ 不正解 (Fuseikai)! Coba lagi.';
+        alert('Browser Anda tidak mendukung fitur Text-to-Speech.');
+      }
+    }
+
+    function checkAnswer(questionId, selected, correct) {
+      const feedback = document.getElementById('feedback-' + questionId);
+      if (!feedback) return;
+
+      feedback.style.display = 'block';
+
+      if (selected === correct) {
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = '⭕ 正解 (Seikai)! Jawaban Anda BENAR.';
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = '❌ 不正解 (Fuseikai)! Jawaban SALAH, coba lagi.';
       }
     }
   </script>
