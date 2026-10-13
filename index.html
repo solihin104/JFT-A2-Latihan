@@ -8,6 +8,8 @@
         :root {
             --primary-color: #2c3e50;
             --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
         }
@@ -27,13 +29,49 @@
             color: var(--primary-color);
             margin-bottom: 5px;
             text-align: center;
+            font-size: 1.8rem;
         }
 
-        .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 20px;
-            font-size: 0.9em;
+        /* Filter & Stats Container */
+        .filter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 360px;
         }
+
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-mastered { color: var(--success-color); }
+        .badge-unmastered { color: var(--accent-color); }
 
         /* Container Card 3D Flip */
         .card-container {
@@ -41,7 +79,7 @@
             height: 220px;
             perspective: 1000px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .card {
@@ -72,7 +110,28 @@
             box-sizing: border-box;
             padding: 20px;
             text-align: center;
-            border: 2px solid #e0e0e0;
+            border: 3px solid #e0e0e0;
+        }
+
+        /* Border indicator berdasarkan status */
+        .status-tag {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .status-tag.mastered {
+            background-color: #e8f8f5;
+            color: var(--success-color);
+        }
+
+        .status-tag.unmastered {
+            background-color: #fadbd8;
+            color: var(--accent-color);
         }
 
         /* Depan: Kanji */
@@ -109,7 +168,39 @@
             color: #34495e;
         }
 
-        /* Navigasi & Kontrol */
+        /* Tombol Aksi Hafal / Belum */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            width: 320px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-master {
+            background-color: var(--success-color);
+        }
+
+        .btn-unmaster {
+            background-color: var(--accent-color);
+        }
+
+        /* Navigasi Kiri Kanan & Shuffle */
         .controls {
             display: flex;
             gap: 10px;
@@ -122,188 +213,274 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 10px 16px;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
         }
 
-        button:hover {
-            background-color: #34495e;
-        }
+        button:hover { background-color: #34495e; }
+        button:active { transform: scale(0.98); }
 
-        button:active {
-            transform: scale(0.98);
+        .btn-shuffle {
+            background-color: var(--warning-color);
         }
-
-        button.btn-shuffle {
-            background-color: #27ae60;
-        }
-
-        button.btn-shuffle:hover {
-            background-color: #219150;
-        }
+        .btn-shuffle:hover { background-color: #d35400; }
 
         .counter {
             font-size: 0.95rem;
             color: #7f8c8d;
             font-weight: bold;
-            margin: 0 10px;
+            margin: 0 5px;
+        }
+
+        .empty-message {
+            display: none;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin: 40px 0;
         }
     </style>
 </head>
 <body>
 
     <h1>Flashcard Kanji 入門</h1>
-    <div class="subtitle">Klik atau tap kartu untuk melihat cara baca dan artinya</div>
 
-    <div class="card-container" onclick="flipCard()">
+    <!-- Filter & Statistik -->
+    <div class="filter-container">
+        <select class="filter-select" id="filterSelect" onchange="applyFilter()">
+            <option value="all">📚 Tampilkan Semua (92 Kata)</option>
+            <option value="unmastered">❌ Hanya yang Belum Hafal</option>
+            <option value="mastered">✅ Hanya yang Sudah Hafal</option>
+        </select>
+        <div class="stats-bar">
+            <div class="stat-item badge-mastered">✅ Hafal: <span id="stat-mastered">0</span></div>
+            <div class="stat-item badge-unmastered">❌ Belum: <span id="stat-unmastered">92</span></div>
+        </div>
+    </div>
+
+    <!-- Tampilan jika list kosong -->
+    <div class="empty-message" id="emptyMessage">
+        Tidak ada kosakata dalam kategori ini 🎉
+    </div>
+
+    <!-- Container Card 3D -->
+    <div class="card-container" id="cardContainer" onclick="flipCard()">
         <div class="card" id="flashcard">
             <!-- Sisi Depan -->
-            <div class="card-face card-front">
+            <div class="card-face card-front" id="cardFrontFace">
+                <span class="status-tag" id="statusTagFront"></span>
                 <div class="kanji" id="card-kanji">名前</div>
                 <div class="hint">Klik untuk membalik</div>
             </div>
             <!-- Sisi Belakang -->
-            <div class="card-face card-back">
+            <div class="card-face card-back" id="cardBackFace">
+                <span class="status-tag" id="statusTagBack"></span>
                 <div class="reading" id="card-reading">なまえ</div>
                 <div class="meaning" id="card-meaning">nama</div>
             </div>
         </div>
     </div>
 
-    <div class="controls">
-        <button onclick="prevCard()">◄ Sebelumnya</button>
+    <!-- Tombol Penanda Hafal / Belum -->
+    <div class="action-buttons" id="actionButtons">
+        <button class="btn-action btn-unmaster" onclick="markStatus(false)">❌ Belum Hafal</button>
+        <button class="btn-action btn-master" onclick="markStatus(true)">✅ Sudah Hafal</button>
+    </div>
+
+    <!-- Controls Navigasi -->
+    <div class="controls" id="controls">
+        <button onclick="prevCard()">◄ Sblm</button>
         <span class="counter" id="card-counter">1 / 92</span>
-        <button onclick="nextCard()">Berikutnya ►</button>
-        <button class="btn-shuffle" onclick="shuffleCards()">🔀 Acak Kartu</button>
+        <button onclick="nextCard()">Sjtn ►</button>
+        <button class="btn-shuffle" onclick="shuffleCards()">🔀 Acak</button>
     </div>
 
     <script>
-        // Data 92 Kosakata Nyuumon
+        // Data Master 92 Kosakata
         const rawVocab = [
-            { kanji: "名前", reading: "なまえ", meaning: "nama" },
-            { kanji: "国", reading: "くに", meaning: "negara" },
-            { kanji: "私", reading: "わたし", meaning: "saya" },
-            { kanji: "父", reading: "ちち", meaning: "ayah" },
-            { kanji: "母", reading: "はは", meaning: "ibu" },
-            { kanji: "子ども", reading: "こども", meaning: "anak" },
-            { kanji: "日本", reading: "にほん", meaning: "Jepang" },
-            { kanji: "～曜日", reading: "～ようび", meaning: "hari ~" },
-            { kanji: "～日", reading: "～にち", meaning: "tanggal ~ / jumlah hari ~" },
-            { kanji: "今日", reading: "きょう", meaning: "hari ini" },
-            { kanji: "日本語", reading: "にほんご", meaning: "bahasa Jepang" },
-            { kanji: "本", reading: "ほん", meaning: "buku" },
-            { kanji: "水", reading: "みず", meaning: "air" },
-            { kanji: "水", reading: "すい", meaning: "hari Rabu (singkatan 水曜日)" },
-            { kanji: "食べます", reading: "たべます", meaning: "makan" },
-            { kanji: "飲みます", reading: "のみます", meaning: "minum" },
-            { kanji: "魚", reading: "さかな", meaning: "ikan" },
-            { kanji: "肉", reading: "にく", meaning: "daging" },
-            { kanji: "好き（な）", reading: "すき（な）", meaning: "suka" },
-            { kanji: "家", reading: "いえ", meaning: "rumah" },
-            { kanji: "新しい", reading: "あたらしい", meaning: "baru" },
-            { kanji: "広い", reading: "ひろい", meaning: "luas" },
-            { kanji: "古い", reading: "ふるい", meaning: "lama / tua" },
-            { kanji: "上", reading: "うえ", meaning: "atas" },
-            { kanji: "下", reading: "した", meaning: "bawah" },
-            { kanji: "中", reading: "なか", meaning: "dalam / tengah" },
-            { kanji: "月", reading: "げつ", meaning: "hari Senin (singkatan 月曜日)" },
-            { kanji: "～月", reading: "～がつ", meaning: "bulan ~" },
-            { kanji: "火", reading: "か", meaning: "hari Selasa (singkatan 火曜日)" },
-            { kanji: "木", reading: "もく", meaning: "hari Kamis (singkatan 木曜日)" },
-            { kanji: "金", reading: "きん", meaning: "hari Jumat (singkatan 金曜日)" },
-            { kanji: "土", reading: "ど", meaning: "hari Sabtu (singkatan 土曜日)" },
-            { kanji: "朝", reading: "あさ", meaning: "pagi" },
-            { kanji: "昼", reading: "ひる", meaning: "siang" },
-            { kanji: "夜", reading: "よる", meaning: "malam" },
-            { kanji: "～時", reading: "～じ", meaning: "jam ~" },
-            { kanji: "～分", reading: "～ふん", meaning: "menit ~" },
-            { kanji: "～半", reading: "～はん", meaning: "setengah / 30 menit" },
-            { kanji: "～枚", reading: "～まい", meaning: "lembar (satuan hitung benda tipis)" },
-            { kanji: "読みます", reading: "よみます", meaning: "membaca" },
-            { kanji: "聞きます", reading: "ききます", meaning: "mendengarkan / bertanya" },
-            { kanji: "見ます", reading: "みます", meaning: "melihat" },
-            { kanji: "友だち", reading: "ともだち", meaning: "teman" },
-            { kanji: "何", reading: "なに", meaning: "apa" },
-            { kanji: "～年", reading: "～ねん", meaning: "tahun ~" },
-            { kanji: "今週", reading: "こんしゅう", meaning: "minggu ini" },
-            { kanji: "今度", reading: "こんど", meaning: "kali ini / lain kali" },
-            { kanji: "東", reading: "ひがし", meaning: "timur" },
-            { kanji: "西", reading: "にし", meaning: "barat" },
-            { kanji: "南", reading: "みなみ", meaning: "selatan" },
-            { kanji: "北", reading: "きた", meaning: "utara" },
-            { kanji: "会社", reading: "かいしゃ", meaning: "perusahaan" },
-            { kanji: "来ます", reading: "きます", meaning: "datang" },
-            { kanji: "行きます", reading: "いきます", meaning: "pergi" },
-            { kanji: "乗ります", reading: "のります", meaning: "naik (kendaraan)" },
-            { kanji: "大きい", reading: "おおきい", meaning: "besar" },
-            { kanji: "小さい", reading: "ちいさい", meaning: "kecil" },
-            { kanji: "高い", reading: "たかい", meaning: "tinggi / mahal" },
-            { kanji: "低い", reading: "ひくい", meaning: "rendah" },
-            { kanji: "前", reading: "まえ", meaning: "depan / sebelum" },
-            { kanji: "後ろ", reading: "うしろ", meaning: "belakang" },
-            { kanji: "横", reading: "よこ", meaning: "samping" },
-            { kanji: "入口", reading: "いりぐち", meaning: "pintu masuk" },
-            { kanji: "出口", reading: "でぐち", meaning: "pintu keluar" },
-            { kanji: "～階", reading: "～かい", meaning: "lantai ~" },
-            { kanji: "押す", reading: "おす", meaning: "menekan / mendorong" },
-            { kanji: "引く", reading: "ひく", meaning: "menarik" },
-            { kanji: "安い", reading: "やすい", meaning: "murah" },
-            { kanji: "一", reading: "いち", meaning: "satu" },
-            { kanji: "二", reading: "に", meaning: "dua" },
-            { kanji: "三", reading: "さん", meaning: "tiga" },
-            { kanji: "四", reading: "よん", meaning: "empat" },
-            { kanji: "五", reading: "ご", meaning: "lima" },
-            { kanji: "六", reading: "ろく", meaning: "enam" },
-            { kanji: "七", reading: "なな", meaning: "tujuh" },
-            { kanji: "八", reading: "はち", meaning: "delapan" },
-            { kanji: "九", reading: "きゅう", meaning: "sembilan" },
-            { kanji: "十", reading: "じゅう", meaning: "sepuluh" },
-            { kanji: "百", reading: "ひゃく", meaning: "seratus" },
-            { kanji: "千", reading: "せん", meaning: "seribu" },
-            { kanji: "万", reading: "まん", meaning: "sepuluh ribu" },
-            { kanji: "～円", reading: "～えん", meaning: "yen ~" },
-            { kanji: "休み", reading: "やすみ", meaning: "libur / istirahat" },
-            { kanji: "映画", reading: "えいが", meaning: "film" },
-            { kanji: "勉強します", reading: "べんきょうします", meaning: "belajar" },
-            { kanji: "買います", reading: "かいます", meaning: "membeli" },
-            { kanji: "温泉", reading: "おんせん", meaning: "pemandian air panas" },
-            { kanji: "予定", reading: "よてい", meaning: "rencana" },
-            { kanji: "来週", reading: "らいしゅう", meaning: "minggu depan" },
-            { kanji: "会います", reading: "あいます", meaning: "bertemu" },
-            { kanji: "入ります", reading: "はいります", meaning: "masuk" },
-            { kanji: "旅行します", reading: "りょこうします", meaning: "bepergian / jalan-jalan" }
+            { id: 1, kanji: "名前", reading: "なまえ", meaning: "nama" },
+            { id: 2, kanji: "国", reading: "くに", meaning: "negara" },
+            { id: 3, kanji: "私", reading: "わたし", meaning: "saya" },
+            { id: 4, kanji: "父", reading: "ちち", meaning: "ayah" },
+            { id: 5, kanji: "母", reading: "はは", meaning: "ibu" },
+            { id: 6, kanji: "子ども", reading: "こども", meaning: "anak" },
+            { id: 7, kanji: "日本", reading: "にほん", meaning: "Jepang" },
+            { id: 8, kanji: "～曜日", reading: "～ようび", meaning: "hari ~" },
+            { id: 9, kanji: "～日", reading: "～にち", meaning: "tanggal ~ / jumlah hari ~" },
+            { id: 10, kanji: "今日", reading: "きょう", meaning: "hari ini" },
+            { id: 11, kanji: "日本語", reading: "にほんご", meaning: "bahasa Jepang" },
+            { id: 12, kanji: "本", reading: "ほん", meaning: "buku" },
+            { id: 13, kanji: "水", reading: "みず", meaning: "air" },
+            { id: 14, kanji: "水", reading: "すい", meaning: "hari Rabu (singkatan 水曜日)" },
+            { id: 15, kanji: "食べます", reading: "たべます", meaning: "makan" },
+            { id: 16, kanji: "飲みます", reading: "のみます", meaning: "minum" },
+            { id: 17, kanji: "魚", reading: "さかな", meaning: "ikan" },
+            { id: 18, kanji: "肉", reading: "にく", meaning: "daging" },
+            { id: 19, kanji: "好き（な）", reading: "すき（な）", meaning: "suka" },
+            { id: 20, kanji: "家", reading: "いえ", meaning: "rumah" },
+            { id: 21, kanji: "新しい", reading: "あたらしい", meaning: "baru" },
+            { id: 22, kanji: "広い", reading: "ひろい", meaning: "luas" },
+            { id: 23, kanji: "古い", reading: "ふるい", meaning: "lama / tua" },
+            { id: 24, kanji: "上", reading: "うえ", meaning: "atas" },
+            { id: 25, kanji: "下", reading: "した", meaning: "bawah" },
+            { id: 26, kanji: "中", reading: "なか", meaning: "dalam / tengah" },
+            { id: 27, kanji: "月", reading: "げつ", meaning: "hari Senin (singkatan 月曜日)" },
+            { id: 28, kanji: "～月", reading: "～がつ", meaning: "bulan ~" },
+            { id: 29, kanji: "火", reading: "か", meaning: "hari Selasa (singkatan 火曜日)" },
+            { id: 30, kanji: "木", reading: "もく", meaning: "hari Kamis (singkatan 木曜日)" },
+            { id: 31, kanji: "金", reading: "きん", meaning: "hari Jumat (singkatan 金曜日)" },
+            { id: 32, kanji: "土", reading: "ど", meaning: "hari Sabtu (singkatan 土曜日)" },
+            { id: 33, kanji: "朝", reading: "あさ", meaning: "pagi" },
+            { id: 34, kanji: "昼", reading: "ひる", meaning: "siang" },
+            { id: 35, kanji: "夜", reading: "よる", meaning: "malam" },
+            { id: 36, kanji: "～時", reading: "～じ", meaning: "jam ~" },
+            { id: 37, kanji: "～分", reading: "～ふん", meaning: "menit ~" },
+            { id: 38, kanji: "～半", reading: "～はん", meaning: "setengah / 30 menit" },
+            { id: 39, kanji: "～枚", reading: "～まい", meaning: "lembar (satuan hitung benda tipis)" },
+            { id: 40, kanji: "読みます", reading: "よみます", meaning: "membaca" },
+            { id: 41, kanji: "聞きます", reading: "ききます", meaning: "mendengarkan / bertanya" },
+            { id: 42, kanji: "見ます", reading: "みます", meaning: "melihat" },
+            { id: 43, kanji: "友だち", reading: "ともだち", meaning: "teman" },
+            { id: 44, kanji: "何", reading: "なに", meaning: "apa" },
+            { id: 45, kanji: "～年", reading: "～ねん", meaning: "tahun ~" },
+            { id: 46, kanji: "今週", reading: "こんしゅう", meaning: "minggu ini" },
+            { id: 47, kanji: "今度", reading: "こんど", meaning: "kali ini / lain kali" },
+            { id: 48, kanji: "東", reading: "ひがし", meaning: "timur" },
+            { id: 49, kanji: "西", reading: "にし", meaning: "barat" },
+            { id: 50, kanji: "南", reading: "みなみ", meaning: "selatan" },
+            { id: 51, kanji: "北", reading: "きた", meaning: "utara" },
+            { id: 52, kanji: "会社", reading: "かいしゃ", meaning: "perusahaan" },
+            { id: 53, kanji: "来ます", reading: "きます", meaning: "datang" },
+            { id: 54, kanji: "行きます", reading: "いきます", meaning: "pergi" },
+            { id: 55, kanji: "乗ります", reading: "のります", meaning: "naik (kendaraan)" },
+            { id: 56, kanji: "大きい", reading: "おおきい", meaning: "besar" },
+            { id: 57, kanji: "小さい", reading: "ちいさい", meaning: "kecil" },
+            { id: 58, kanji: "高い", reading: "たかい", meaning: "tinggi / mahal" },
+            { id: 59, kanji: "低い", reading: "ひくい", meaning: "rendah" },
+            { id: 60, kanji: "前", reading: "まえ", meaning: "depan / sebelum" },
+            { id: 61, kanji: "後ろ", reading: "うしろ", meaning: "belakang" },
+            { id: 62, kanji: "横", reading: "よこ", meaning: "samping" },
+            { id: 63, kanji: "入口", reading: "いりぐち", meaning: "pintu masuk" },
+            { id: 64, kanji: "出口", reading: "でぐち", meaning: "pintu keluar" },
+            { id: 65, kanji: "～階", reading: "～かい", meaning: "lantai ~" },
+            { id: 66, kanji: "押す", reading: "おす", meaning: "menekan / mendorong" },
+            { id: 67, kanji: "引く", reading: "ひく", meaning: "menarik" },
+            { id: 68, kanji: "安い", reading: "やすい", meaning: "murah" },
+            { id: 69, kanji: "一", reading: "いち", meaning: "satu" },
+            { id: 70, kanji: "二", reading: "に", meaning: "dua" },
+            { id: 71, kanji: "三", reading: "さん", meaning: "tiga" },
+            { id: 72, kanji: "四", reading: "よん", meaning: "empat" },
+            { id: 73, kanji: "五", reading: "ご", meaning: "lima" },
+            { id: 74, kanji: "六", reading: "ろく", meaning: "enam" },
+            { id: 75, kanji: "七", reading: "なな", meaning: "tujuh" },
+            { id: 76, kanji: "八", reading: "はち", meaning: "delapan" },
+            { id: 77, kanji: "九", reading: "きゅう", meaning: "sembilan" },
+            { id: 78, kanji: "十", reading: "じゅう", meaning: "sepuluh" },
+            { id: 79, kanji: "百", reading: "ひゃく", meaning: "seratus" },
+            { id: 80, kanji: "千", reading: "せん", meaning: "seribu" },
+            { id: 81, kanji: "万", reading: "まん", meaning: "sepuluh ribu" },
+            { id: 82, kanji: "～円", reading: "～えん", meaning: "yen ~" },
+            { id: 83, kanji: "休み", reading: "やすみ", meaning: "libur / istirahat" },
+            { id: 84, kanji: "映画", reading: "えいが", meaning: "film" },
+            { id: 85, kanji: "勉強します", reading: "べんきょうします", meaning: "belajar" },
+            { id: 86, kanji: "買います", reading: "かいます", meaning: "membeli" },
+            { id: 87, kanji: "温泉", reading: "おんせん", meaning: "pemandian air panas" },
+            { id: 88, kanji: "予定", reading: "よてい", meaning: "rencana" },
+            { id: 89, kanji: "来週", reading: "らいしゅう", meaning: "minggu depan" },
+            { id: 90, kanji: "会います", reading: "あいます", meaning: "bertemu" },
+            { id: 91, kanji: "入ります", reading: "はいります", meaning: "masuk" },
+            { id: 92, kanji: "旅行します", reading: "りょこうします", meaning: "bepergian / jalan-jalan" }
         ];
 
-        let vocabList = [...rawVocab];
+        // Load status hafal dari LocalStorage (jika ada)
+        let masteredIds = JSON.parse(localStorage.getItem('kanji_mastered_ids')) || [];
+
+        let currentFilteredList = [];
         let currentIndex = 0;
         let isFlipped = false;
 
         const cardElement = document.getElementById('flashcard');
+        const cardContainer = document.getElementById('card-container');
         const kanjiElement = document.getElementById('card-kanji');
         const readingElement = document.getElementById('card-reading');
         const meaningElement = document.getElementById('card-meaning');
         const counterElement = document.getElementById('card-counter');
+        const filterSelect = document.getElementById('filterSelect');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const actionButtons = document.getElementById('actionButtons');
+        const controls = document.getElementById('controls');
+        
+        const statusTagFront = document.getElementById('statusTagFront');
+        const statusTagBack = document.getElementById('statusTagBack');
 
-        function updateCard() {
-            // Pastikan kartu kembali ke posisi depan saat berpindah kartu
+        // Update Statistik Keseluruhan
+        function updateStats() {
+            const masteredCount = masteredIds.length;
+            const unmasteredCount = rawVocab.length - masteredCount;
+            document.getElementById('stat-mastered').textContent = masteredCount;
+            document.getElementById('stat-unmastered').textContent = unmasteredCount;
+        }
+
+        // Terapkan Filter Pilihan (Semua / Belum Hafal / Sudah Hafal)
+        function applyFilter() {
+            const filterValue = filterSelect.value;
+            
+            if (filterValue === 'mastered') {
+                currentFilteredList = rawVocab.filter(item => masteredIds.includes(item.id));
+            } else if (filterValue === 'unmastered') {
+                currentFilteredList = rawVocab.filter(item => !masteredIds.includes(item.id));
+            } else {
+                currentFilteredList = [...rawVocab];
+            }
+
+            currentIndex = 0;
+            updateCardDisplay();
+        }
+
+        function updateCardDisplay() {
+            updateStats();
+
+            if (currentFilteredList.length === 0) {
+                document.getElementById('cardContainer').style.display = 'none';
+                actionButtons.style.display = 'none';
+                controls.style.display = 'none';
+                emptyMessage.style.display = 'block';
+                return;
+            }
+
+            document.getElementById('cardContainer').style.display = 'block';
+            actionButtons.style.display = 'flex';
+            controls.style.display = 'flex';
+            emptyMessage.style.display = 'none';
+
             if (isFlipped) {
                 cardElement.classList.remove('flipped');
                 isFlipped = false;
-                setTimeout(renderContent, 200); // Tunggu animasi flip setengah jalan
+                setTimeout(renderContent, 200);
             } else {
                 renderContent();
             }
         }
 
         function renderContent() {
-            const current = vocabList[currentIndex];
+            const current = currentFilteredList[currentIndex];
             kanjiElement.textContent = current.kanji;
             readingElement.textContent = current.reading;
             meaningElement.textContent = current.meaning;
-            counterElement.textContent = `${currentIndex + 1} / ${vocabList.length}`;
+            counterElement.textContent = `${currentIndex + 1} / ${currentFilteredList.length}`;
+
+            // Status Tagging
+            const isMastered = masteredIds.includes(current.id);
+            const tagText = isMastered ? "✅ Sudah Hafal" : "❌ Belum Hafal";
+            const tagClass = isMastered ? "status-tag mastered" : "status-tag unmastered";
+
+            statusTagFront.textContent = tagText;
+            statusTagFront.className = tagClass;
+            statusTagBack.textContent = tagText;
+            statusTagBack.className = tagClass;
         }
 
         function flipCard() {
@@ -311,36 +488,60 @@
             cardElement.classList.toggle('flipped');
         }
 
-        function nextCard() {
-            if (currentIndex < vocabList.length - 1) {
-                currentIndex++;
+        function markStatus(isMastered) {
+            if (currentFilteredList.length === 0) return;
+
+            const current = currentFilteredList[currentIndex];
+
+            if (isMastered) {
+                if (!masteredIds.includes(current.id)) {
+                    masteredIds.push(current.id);
+                }
             } else {
-                currentIndex = 0; // Kembali ke awal jika sudah di kartu terakhir
+                masteredIds = masteredIds.filter(id => id !== current.id);
             }
-            updateCard();
+
+            // Simpan ke LocalStorage Browser
+            localStorage.setItem('kanji_mastered_ids', JSON.stringify(masteredIds));
+
+            // Jika dalam mode filter tertentu, hapus item yang diubah dari antrean aktif saat ini
+            const filterValue = filterSelect.value;
+            if ((filterValue === 'mastered' && !isMastered) || (filterValue === 'unmastered' && isMastered)) {
+                currentFilteredList.splice(currentIndex, 1);
+                if (currentIndex >= currentFilteredList.length) {
+                    currentIndex = Math.max(0, currentFilteredList.length - 1);
+                }
+                updateCardDisplay();
+            } else {
+                updateCardDisplay();
+            }
+        }
+
+        function nextCard() {
+            if (currentFilteredList.length === 0) return;
+            currentIndex = (currentIndex < currentFilteredList.length - 1) ? currentIndex + 1 : 0;
+            updateCardDisplay();
         }
 
         function prevCard() {
-            if (currentIndex > 0) {
-                currentIndex--;
-            } else {
-                currentIndex = vocabList.length - 1; // Ke kartu terakhir jika di posisi awal
-            }
-            updateCard();
+            if (currentFilteredList.length === 0) return;
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : currentFilteredList.length - 1;
+            updateCardDisplay();
         }
 
         function shuffleCards() {
-            // Algoritma Fisher-Yates Shuffle
-            for (let i = vocabList.length - 1; i > 0; i--) {
+            if (currentFilteredList.length === 0) return;
+            // Fisher-Yates Shuffle
+            for (let i = currentFilteredList.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [vocabList[i], vocabList[j]] = [vocabList[j], vocabList[i]];
+                [currentFilteredList[i], currentFilteredList[j]] = [currentFilteredList[j], currentFilteredList[i]];
             }
             currentIndex = 0;
-            updateCard();
+            updateCardDisplay();
         }
 
-        // Jalankan tampilan awal saat halaman dibuka
-        renderContent();
+        // Jalankan awal
+        applyFilter();
     </script>
 </body>
 </html>
