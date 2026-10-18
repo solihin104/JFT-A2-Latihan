@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard Kanji 入門 (Nyuumon)</title>
+    <title>Flashcard Kanji Irodori (Nyuumon & A2.1)</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -43,16 +43,22 @@
             max-width: 360px;
         }
 
+        .select-group {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
         .filter-select {
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 8px;
             border: 2px solid var(--primary-color);
             background-color: white;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--primary-color);
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            flex: 1;
         }
 
         .stats-bar {
@@ -118,7 +124,7 @@
             position: absolute;
             top: 10px;
             right: 15px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
             padding: 4px 8px;
             border-radius: 12px;
@@ -134,13 +140,25 @@
             color: var(--accent-color);
         }
 
+        .level-tag {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background-color: #ebf5fb;
+            color: #2980b9;
+        }
+
         /* Depan: Kanji */
         .card-front {
             color: var(--primary-color);
         }
 
         .kanji {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: bold;
         }
 
@@ -157,14 +175,14 @@
         }
 
         .reading {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--accent-color);
             margin-bottom: 10px;
             font-weight: 600;
         }
 
         .meaning {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #34495e;
         }
 
@@ -192,13 +210,8 @@
             gap: 6px;
         }
 
-        .btn-master {
-            background-color: var(--success-color);
-        }
-
-        .btn-unmaster {
-            background-color: var(--accent-color);
-        }
+        .btn-master { background-color: var(--success-color); }
+        .btn-unmaster { background-color: var(--accent-color); }
 
         /* Navigasi Kiri Kanan & Shuffle */
         .controls {
@@ -223,9 +236,7 @@
         button:hover { background-color: #34495e; }
         button:active { transform: scale(0.98); }
 
-        .btn-shuffle {
-            background-color: var(--warning-color);
-        }
+        .btn-shuffle { background-color: var(--warning-color); }
         .btn-shuffle:hover { background-color: #d35400; }
 
         .counter {
@@ -246,18 +257,25 @@
 </head>
 <body>
 
-    <h1>Flashcard Kanji 入門</h1>
+    <h1>Flashcard Kanji Irodori</h1>
 
     <!-- Filter & Statistik -->
     <div class="filter-container">
-        <select class="filter-select" id="filterSelect" onchange="applyFilter()">
-            <option value="all">📚 Tampilkan Semua (92 Kata)</option>
-            <option value="unmastered">❌ Hanya yang Belum Hafal</option>
-            <option value="mastered">✅ Hanya yang Sudah Hafal</option>
-        </select>
+        <div class="select-group">
+            <select class="filter-select" id="levelSelect" onchange="applyFilter()">
+                <option value="all">📚 Semua Level</option>
+                <option value="Nyuumon">🔰 入門 (Nyuumon)</option>
+                <option value="A2.1">📗 A2.1</option>
+            </select>
+            <select class="filter-select" id="statusSelect" onchange="applyFilter()">
+                <option value="all">📝 Semua Status</option>
+                <option value="unmastered">❌ Belum Hafal</option>
+                <option value="mastered">✅ Sudah Hafal</option>
+            </select>
+        </div>
         <div class="stats-bar">
             <div class="stat-item badge-mastered">✅ Hafal: <span id="stat-mastered">0</span></div>
-            <div class="stat-item badge-unmastered">❌ Belum: <span id="stat-unmastered">92</span></div>
+            <div class="stat-item badge-unmastered">❌ Belum: <span id="stat-unmastered">0</span></div>
         </div>
     </div>
 
@@ -271,12 +289,14 @@
         <div class="card" id="flashcard">
             <!-- Sisi Depan -->
             <div class="card-face card-front" id="cardFrontFace">
+                <span class="level-tag" id="levelTagFront"></span>
                 <span class="status-tag" id="statusTagFront"></span>
                 <div class="kanji" id="card-kanji">名前</div>
                 <div class="hint">Klik untuk membalik</div>
             </div>
             <!-- Sisi Belakang -->
             <div class="card-face card-back" id="cardBackFace">
+                <span class="level-tag" id="levelTagBack"></span>
                 <span class="status-tag" id="statusTagBack"></span>
                 <div class="reading" id="card-reading">なまえ</div>
                 <div class="meaning" id="card-meaning">nama</div>
@@ -293,151 +313,344 @@
     <!-- Controls Navigasi -->
     <div class="controls" id="controls">
         <button onclick="prevCard()">◄ Sblm</button>
-        <span class="counter" id="card-counter">1 / 92</span>
+        <span class="counter" id="card-counter">1 / 0</span>
         <button onclick="nextCard()">Sjtn ►</button>
         <button class="btn-shuffle" onclick="shuffleCards()">🔀 Acak</button>
     </div>
 
     <script>
-        // Data Master 92 Kosakata
+        // Data Master Kosakata (Nyuumon + A2.1 Unik)
         const rawVocab = [
-            { id: 1, kanji: "名前", reading: "なまえ", meaning: "nama" },
-            { id: 2, kanji: "国", reading: "くに", meaning: "negara" },
-            { id: 3, kanji: "私", reading: "わたし", meaning: "saya" },
-            { id: 4, kanji: "父", reading: "ちち", meaning: "ayah" },
-            { id: 5, kanji: "母", reading: "はは", meaning: "ibu" },
-            { id: 6, kanji: "子ども", reading: "こども", meaning: "anak" },
-            { id: 7, kanji: "日本", reading: "にほん", meaning: "Jepang" },
-            { id: 8, kanji: "～曜日", reading: "～ようび", meaning: "hari ~" },
-            { id: 9, kanji: "～日", reading: "～にち", meaning: "tanggal ~ / jumlah hari ~" },
-            { id: 10, kanji: "今日", reading: "きょう", meaning: "hari ini" },
-            { id: 11, kanji: "日本語", reading: "にほんご", meaning: "bahasa Jepang" },
-            { id: 12, kanji: "本", reading: "ほん", meaning: "buku" },
-            { id: 13, kanji: "水", reading: "みず", meaning: "air" },
-            { id: 14, kanji: "水", reading: "すい", meaning: "hari Rabu (singkatan 水曜日)" },
-            { id: 15, kanji: "食べます", reading: "たべます", meaning: "makan" },
-            { id: 16, kanji: "飲みます", reading: "のみます", meaning: "minum" },
-            { id: 17, kanji: "魚", reading: "さかな", meaning: "ikan" },
-            { id: 18, kanji: "肉", reading: "にく", meaning: "daging" },
-            { id: 19, kanji: "好き（な）", reading: "すき（な）", meaning: "suka" },
-            { id: 20, kanji: "家", reading: "いえ", meaning: "rumah" },
-            { id: 21, kanji: "新しい", reading: "あたらしい", meaning: "baru" },
-            { id: 22, kanji: "広い", reading: "ひろい", meaning: "luas" },
-            { id: 23, kanji: "古い", reading: "ふるい", meaning: "lama / tua" },
-            { id: 24, kanji: "上", reading: "うえ", meaning: "atas" },
-            { id: 25, kanji: "下", reading: "した", meaning: "bawah" },
-            { id: 26, kanji: "中", reading: "なか", meaning: "dalam / tengah" },
-            { id: 27, kanji: "月", reading: "げつ", meaning: "hari Senin (singkatan 月曜日)" },
-            { id: 28, kanji: "～月", reading: "～がつ", meaning: "bulan ~" },
-            { id: 29, kanji: "火", reading: "か", meaning: "hari Selasa (singkatan 火曜日)" },
-            { id: 30, kanji: "木", reading: "もく", meaning: "hari Kamis (singkatan 木曜日)" },
-            { id: 31, kanji: "金", reading: "きん", meaning: "hari Jumat (singkatan 金曜日)" },
-            { id: 32, kanji: "土", reading: "ど", meaning: "hari Sabtu (singkatan 土曜日)" },
-            { id: 33, kanji: "朝", reading: "あさ", meaning: "pagi" },
-            { id: 34, kanji: "昼", reading: "ひる", meaning: "siang" },
-            { id: 35, kanji: "夜", reading: "よる", meaning: "malam" },
-            { id: 36, kanji: "～時", reading: "～じ", meaning: "jam ~" },
-            { id: 37, kanji: "～分", reading: "～ふん", meaning: "menit ~" },
-            { id: 38, kanji: "～半", reading: "～はん", meaning: "setengah / 30 menit" },
-            { id: 39, kanji: "～枚", reading: "～まい", meaning: "lembar (satuan hitung benda tipis)" },
-            { id: 40, kanji: "読みます", reading: "よみます", meaning: "membaca" },
-            { id: 41, kanji: "聞きます", reading: "ききます", meaning: "mendengarkan / bertanya" },
-            { id: 42, kanji: "見ます", reading: "みます", meaning: "melihat" },
-            { id: 43, kanji: "友だち", reading: "ともだち", meaning: "teman" },
-            { id: 44, kanji: "何", reading: "なに", meaning: "apa" },
-            { id: 45, kanji: "～年", reading: "～ねん", meaning: "tahun ~" },
-            { id: 46, kanji: "今週", reading: "こんしゅう", meaning: "minggu ini" },
-            { id: 47, kanji: "今度", reading: "こんど", meaning: "kali ini / lain kali" },
-            { id: 48, kanji: "東", reading: "ひがし", meaning: "timur" },
-            { id: 49, kanji: "西", reading: "にし", meaning: "barat" },
-            { id: 50, kanji: "南", reading: "みなみ", meaning: "selatan" },
-            { id: 51, kanji: "北", reading: "きた", meaning: "utara" },
-            { id: 52, kanji: "会社", reading: "かいしゃ", meaning: "perusahaan" },
-            { id: 53, kanji: "来ます", reading: "きます", meaning: "datang" },
-            { id: 54, kanji: "行きます", reading: "いきます", meaning: "pergi" },
-            { id: 55, kanji: "乗ります", reading: "のります", meaning: "naik (kendaraan)" },
-            { id: 56, kanji: "大きい", reading: "おおきい", meaning: "besar" },
-            { id: 57, kanji: "小さい", reading: "ちいさい", meaning: "kecil" },
-            { id: 58, kanji: "高い", reading: "たかい", meaning: "tinggi / mahal" },
-            { id: 59, kanji: "低い", reading: "ひくい", meaning: "rendah" },
-            { id: 60, kanji: "前", reading: "まえ", meaning: "depan / sebelum" },
-            { id: 61, kanji: "後ろ", reading: "うしろ", meaning: "belakang" },
-            { id: 62, kanji: "横", reading: "よこ", meaning: "samping" },
-            { id: 63, kanji: "入口", reading: "いりぐち", meaning: "pintu masuk" },
-            { id: 64, kanji: "出口", reading: "でぐち", meaning: "pintu keluar" },
-            { id: 65, kanji: "～階", reading: "～かい", meaning: "lantai ~" },
-            { id: 66, kanji: "押す", reading: "おす", meaning: "menekan / mendorong" },
-            { id: 67, kanji: "引く", reading: "ひく", meaning: "menarik" },
-            { id: 68, kanji: "安い", reading: "やすい", meaning: "murah" },
-            { id: 69, kanji: "一", reading: "いち", meaning: "satu" },
-            { id: 70, kanji: "二", reading: "に", meaning: "dua" },
-            { id: 71, kanji: "三", reading: "さん", meaning: "tiga" },
-            { id: 72, kanji: "四", reading: "よん", meaning: "empat" },
-            { id: 73, kanji: "五", reading: "ご", meaning: "lima" },
-            { id: 74, kanji: "六", reading: "ろく", meaning: "enam" },
-            { id: 75, kanji: "七", reading: "なな", meaning: "tujuh" },
-            { id: 76, kanji: "八", reading: "はち", meaning: "delapan" },
-            { id: 77, kanji: "九", reading: "きゅう", meaning: "sembilan" },
-            { id: 78, kanji: "十", reading: "じゅう", meaning: "sepuluh" },
-            { id: 79, kanji: "百", reading: "ひゃく", meaning: "seratus" },
-            { id: 80, kanji: "千", reading: "せん", meaning: "seribu" },
-            { id: 81, kanji: "万", reading: "まん", meaning: "sepuluh ribu" },
-            { id: 82, kanji: "～円", reading: "～えん", meaning: "yen ~" },
-            { id: 83, kanji: "休み", reading: "やすみ", meaning: "libur / istirahat" },
-            { id: 84, kanji: "映画", reading: "えいが", meaning: "film" },
-            { id: 85, kanji: "勉強します", reading: "べんきょうします", meaning: "belajar" },
-            { id: 86, kanji: "買います", reading: "かいます", meaning: "membeli" },
-            { id: 87, kanji: "温泉", reading: "おんせん", meaning: "pemandian air panas" },
-            { id: 88, kanji: "予定", reading: "よてい", meaning: "rencana" },
-            { id: 89, kanji: "来週", reading: "らいしゅう", meaning: "minggu depan" },
-            { id: 90, kanji: "会います", reading: "あいます", meaning: "bertemu" },
-            { id: 91, kanji: "入ります", reading: "はいります", meaning: "masuk" },
-            { id: 92, kanji: "旅行します", reading: "りょこうします", meaning: "bepergian / jalan-jalan" }
+            // --- LEVEL 入門 (Nyuumon) ---
+            { id: 1, level: "Nyuumon", kanji: "名前", reading: "なまえ", meaning: "nama" },
+            { id: 2, level: "Nyuumon", kanji: "国", reading: "くに", meaning: "negara" },
+            { id: 3, level: "Nyuumon", kanji: "私", reading: "わたし", meaning: "saya" },
+            { id: 4, level: "Nyuumon", kanji: "父", reading: "ちち", meaning: "ayah" },
+            { id: 5, level: "Nyuumon", kanji: "母", reading: "はは", meaning: "ibu" },
+            { id: 6, level: "Nyuumon", kanji: "子ども", reading: "こども", meaning: "anak" },
+            { id: 7, level: "Nyuumon", kanji: "日本", reading: "にほん", meaning: "Jepang" },
+            { id: 8, level: "Nyuumon", kanji: "～曜日", reading: "～ようび", meaning: "hari ~" },
+            { id: 9, level: "Nyuumon", kanji: "～日", reading: "～にち", meaning: "tanggal ~ / jumlah hari ~" },
+            { id: 10, level: "Nyuumon", kanji: "今日", reading: "きょう", meaning: "hari ini" },
+            { id: 11, level: "Nyuumon", kanji: "日本語", reading: "にほんご", meaning: "bahasa Jepang" },
+            { id: 12, level: "Nyuumon", kanji: "本", reading: "ほん", meaning: "buku" },
+            { id: 13, level: "Nyuumon", kanji: "水", reading: "みず", meaning: "air" },
+            { id: 14, level: "Nyuumon", kanji: "水", reading: "すい", meaning: "hari Rabu (singkatan 水曜日)" },
+            { id: 15, level: "Nyuumon", kanji: "食べます", reading: "たべます", meaning: "makan" },
+            { id: 16, level: "Nyuumon", kanji: "飲みます", reading: "のみます", meaning: "minum" },
+            { id: 17, level: "Nyuumon", kanji: "魚", reading: "さかな", meaning: "ikan" },
+            { id: 18, level: "Nyuumon", kanji: "肉", reading: "にく", meaning: "daging" },
+            { id: 19, level: "Nyuumon", kanji: "好き（な）", reading: "すき（な）", meaning: "suka" },
+            { id: 20, level: "Nyuumon", kanji: "家", reading: "いえ", meaning: "rumah" },
+            { id: 21, level: "Nyuumon", kanji: "新しい", reading: "あたらしい", meaning: "baru" },
+            { id: 22, level: "Nyuumon", kanji: "広い", reading: "ひろい", meaning: "luas" },
+            { id: 23, level: "Nyuumon", kanji: "古い", reading: "ふるい", meaning: "lama / tua" },
+            { id: 24, level: "Nyuumon", kanji: "上", reading: "うえ", meaning: "atas" },
+            { id: 25, level: "Nyuumon", kanji: "下", reading: "した", meaning: "bawah" },
+            { id: 26, level: "Nyuumon", kanji: "中", reading: "なか", meaning: "dalam / tengah" },
+            { id: 27, level: "Nyuumon", kanji: "月", reading: "げつ", meaning: "hari Senin (singkatan 月曜日)" },
+            { id: 28, level: "Nyuumon", kanji: "～月", reading: "～がつ", meaning: "bulan ~" },
+            { id: 29, level: "Nyuumon", kanji: "火", reading: "か", meaning: "hari Selasa (singkatan 火曜日)" },
+            { id: 30, level: "Nyuumon", kanji: "木", reading: "もく", meaning: "hari Kamis (singkatan 木曜日)" },
+            { id: 31, level: "Nyuumon", kanji: "金", reading: "きん", meaning: "hari Jumat (singkatan 金曜日)" },
+            { id: 32, level: "Nyuumon", kanji: "土", reading: "ど", meaning: "hari Sabtu (singkatan 土曜日)" },
+            { id: 33, level: "Nyuumon", kanji: "朝", reading: "あさ", meaning: "pagi" },
+            { id: 34, level: "Nyuumon", kanji: "昼", reading: "ひる", meaning: "siang" },
+            { id: 35, level: "Nyuumon", kanji: "夜", reading: "よる", meaning: "malam" },
+            { id: 36, level: "Nyuumon", kanji: "～時", reading: "～じ", meaning: "jam ~" },
+            { id: 37, level: "Nyuumon", kanji: "～分", reading: "～ふん", meaning: "menit ~" },
+            { id: 38, level: "Nyuumon", kanji: "～半", reading: "～はん", meaning: "setengah / 30 menit" },
+            { id: 39, level: "Nyuumon", kanji: "～枚", reading: "～まい", meaning: "lembar (satuan hitung benda tipis)" },
+            { id: 40, level: "Nyuumon", kanji: "読みます", reading: "よみます", meaning: "membaca" },
+            { id: 41, level: "Nyuumon", kanji: "聞きます", reading: "ききます", meaning: "mendengarkan / bertanya" },
+            { id: 42, level: "Nyuumon", kanji: "見ます", reading: "みます", meaning: "melihat" },
+            { id: 43, level: "Nyuumon", kanji: "友だち", reading: "ともだち", meaning: "teman" },
+            { id: 44, level: "Nyuumon", kanji: "何", reading: "なに", meaning: "apa" },
+            { id: 45, level: "Nyuumon", kanji: "～年", reading: "～ねん", meaning: "tahun ~" },
+            { id: 46, level: "Nyuumon", kanji: "今週", reading: "こんしゅう", meaning: "minggu ini" },
+            { id: 47, level: "Nyuumon", kanji: "今度", reading: "こんど", meaning: "kali ini / lain kali" },
+            { id: 48, level: "Nyuumon", kanji: "東", reading: "ひがし", meaning: "timur" },
+            { id: 49, level: "Nyuumon", kanji: "西", reading: "にし", meaning: "barat" },
+            { id: 50, level: "Nyuumon", kanji: "南", reading: "みなみ", meaning: "selatan" },
+            { id: 51, level: "Nyuumon", kanji: "北", reading: "きた", meaning: "utara" },
+            { id: 52, level: "Nyuumon", kanji: "会社", reading: "かいしゃ", meaning: "perusahaan" },
+            { id: 53, level: "Nyuumon", kanji: "来ます", reading: "きます", meaning: "datang" },
+            { id: 54, level: "Nyuumon", kanji: "行きます", reading: "いきます", meaning: "pergi" },
+            { id: 55, level: "Nyuumon", kanji: "乗ります", reading: "のります", meaning: "naik (kendaraan)" },
+            { id: 56, level: "Nyuumon", kanji: "大きい", reading: "おおきい", meaning: "besar" },
+            { id: 57, level: "Nyuumon", kanji: "小さい", reading: "ちいさい", meaning: "kecil" },
+            { id: 58, level: "Nyuumon", kanji: "高い", reading: "たかい", meaning: "tinggi / mahal" },
+            { id: 59, level: "Nyuumon", kanji: "低い", reading: "ひくい", meaning: "rendah" },
+            { id: 60, level: "Nyuumon", kanji: "前", reading: "まえ", meaning: "depan / sebelum" },
+            { id: 61, level: "Nyuumon", kanji: "後ろ", reading: "うしろ", meaning: "belakang" },
+            { id: 62, level: "Nyuumon", kanji: "横", reading: "よこ", meaning: "samping" },
+            { id: 63, level: "Nyuumon", kanji: "入口", reading: "いりぐち", meaning: "pintu masuk" },
+            { id: 64, level: "Nyuumon", kanji: "出口", reading: "でぐち", meaning: "pintu keluar" },
+            { id: 65, level: "Nyuumon", kanji: "～階", reading: "～かい", meaning: "lantai ~" },
+            { id: 66, level: "Nyuumon", kanji: "押す", reading: "おす", meaning: "menekan / mendorong" },
+            { id: 67, level: "Nyuumon", kanji: "引く", reading: "ひく", meaning: "menarik" },
+            { id: 68, level: "Nyuumon", kanji: "安い", reading: "やすい", meaning: "murah" },
+            { id: 69, level: "Nyuumon", kanji: "一", reading: "いち", meaning: "satu" },
+            { id: 70, level: "Nyuumon", kanji: "二", reading: "に", meaning: "dua" },
+            { id: 71, level: "Nyuumon", kanji: "三", reading: "さん", meaning: "tiga" },
+            { id: 72, level: "Nyuumon", kanji: "四", reading: "よん", meaning: "empat" },
+            { id: 73, level: "Nyuumon", kanji: "五", reading: "ご", meaning: "lima" },
+            { id: 74, level: "Nyuumon", kanji: "六", reading: "ろく", meaning: "enam" },
+            { id: 75, level: "Nyuumon", kanji: "七", reading: "なな", meaning: "tujuh" },
+            { id: 76, level: "Nyuumon", kanji: "八", reading: "はち", meaning: "delapan" },
+            { id: 77, level: "Nyuumon", kanji: "九", reading: "きゅう", meaning: "sembilan" },
+            { id: 78, level: "Nyuumon", kanji: "十", reading: "じゅう", meaning: "sepuluh" },
+            { id: 79, level: "Nyuumon", kanji: "百", reading: "ひゃく", meaning: "seratus" },
+            { id: 80, level: "Nyuumon", kanji: "千", reading: "せん", meaning: "seribu" },
+            { id: 81, level: "Nyuumon", kanji: "万", reading: "まん", meaning: "sepuluh ribu" },
+            { id: 82, level: "Nyuumon", kanji: "～円", reading: "～えん", meaning: "yen ~" },
+            { id: 83, level: "Nyuumon", kanji: "休み", reading: "やすみ", meaning: "libur / istirahat" },
+            { id: 84, level: "Nyuumon", kanji: "映画", reading: "えいが", meaning: "film" },
+            { id: 85, level: "Nyuumon", kanji: "勉強します", reading: "べんきょうします", meaning: "belajar" },
+            { id: 86, level: "Nyuumon", kanji: "買います", reading: "かいます", meaning: "membeli" },
+            { id: 87, level: "Nyuumon", kanji: "温泉", reading: "おんせん", meaning: "pemandian air panas" },
+            { id: 88, level: "Nyuumon", kanji: "予定", reading: "よてい", meaning: "rencana" },
+            { id: 89, level: "Nyuumon", kanji: "来週", reading: "らいしゅう", meaning: "minggu depan" },
+            { id: 90, level: "Nyuumon", kanji: "会います", reading: "あいます", meaning: "bertemu" },
+            { id: 91, level: "Nyuumon", kanji: "入ります", reading: "はいります", meaning: "masuk" },
+            { id: 92, level: "Nyuumon", kanji: "旅行します", reading: "りょこうします", meaning: "bepergian / jalan-jalan" },
+
+            // --- LEVEL A2.1 ---
+            { id: 101, level: "A2.1", kanji: "去年", reading: "きょねん", meaning: "tahun lalu" },
+            { id: 102, level: "A2.1", kanji: "先週", reading: "せんしゅう", meaning: "minggu lalu" },
+            { id: 103, level: "A2.1", kanji: "学生", reading: "がくせい", meaning: "siswa / mahasiswa" },
+            { id: 104, level: "A2.1", kanji: "学校", reading: "がっこう", meaning: "sekolah" },
+            { id: 105, level: "A2.1", kanji: "生活", reading: "せいかつ", meaning: "kehidupan sehari-hari" },
+            { id: 106, level: "A2.1", kanji: "仕事", reading: "しごと", meaning: "pekerjaan" },
+            { id: 107, level: "A2.1", kanji: "元気（な）", reading: "げんき（な）", meaning: "sehat / bersemangat" },
+            { id: 108, level: "A2.1", kanji: "忙しい", reading: "いそがしい", meaning: "sibuk" },
+            { id: 109, level: "A2.1", kanji: "働く", reading: "はたらく", meaning: "bekerja" },
+            { id: 110, level: "A2.1", kanji: "作る", reading: "つくる", meaning: "membuat" },
+            { id: 111, level: "A2.1", kanji: "家族", reading: "かぞく", meaning: "keluarga" },
+            { id: 112, level: "A2.1", kanji: "出かける", reading: "でかける", meaning: "bepergian / keluar rumah" },
+            { id: 113, level: "A2.1", kanji: "英語", reading: "えいご", meaning: "bahasa Inggris" },
+            { id: 114, level: "A2.1", kanji: "人", reading: "ひと", meaning: "orang" },
+            { id: 115, level: "A2.1", kanji: "～人", reading: "～にん", meaning: "~ orang (satuan hitung)" },
+            { id: 116, level: "A2.1", kanji: "～人", reading: "～じん", meaning: "orang ~ (kewarganegaraan)" },
+            { id: 117, level: "A2.1", kanji: "犬", reading: "いぬ", meaning: "anjing" },
+            { id: 118, level: "A2.1", kanji: "夕方", reading: "ゆうがた", meaning: "sore hari" },
+            { id: 119, level: "A2.1", kanji: "音楽", reading: "おんがく", meaning: "musik" },
+            { id: 120, level: "A2.1", kanji: "習う", reading: "ならう", meaning: "belajar (dari seseorang)" },
+            { id: 121, level: "A2.1", kanji: "話す", reading: "はなす", meaning: "berbicara" },
+            { id: 122, level: "A2.1", kanji: "季節", reading: "きせつ", meaning: "musim" },
+            { id: 123, level: "A2.1", kanji: "春", reading: "はる", meaning: "musim semi" },
+            { id: 124, level: "A2.1", kanji: "夏", reading: "なつ", meaning: "musim panas" },
+            { id: 125, level: "A2.1", kanji: "秋", reading: "あき", meaning: "musim gugur" },
+            { id: 126, level: "A2.1", kanji: "冬", reading: "ふゆ", meaning: "musim dingin" },
+            { id: 127, level: "A2.1", kanji: "花", reading: "はな", meaning: "bunga" },
+            { id: 128, level: "A2.1", kanji: "同じ", reading: "おなじ", meaning: "sama" },
+            { id: 129, level: "A2.1", kanji: "暑い", reading: "あつい", meaning: "panas (cuaca)" },
+            { id: 130, level: "A2.1", kanji: "寒い", reading: "さむい", meaning: "dingin (cuaca)" },
+            { id: 131, level: "A2.1", kanji: "昨日", reading: "きのう", meaning: "kemarin" },
+            { id: 132, level: "A2.1", kanji: "明日", reading: "あした", meaning: "besok" },
+            { id: 133, level: "A2.1", kanji: "毎日", reading: "まいにち", meaning: "setiap hari" },
+            { id: 134, level: "A2.1", kanji: "今", reading: "いま", meaning: "sekarang" },
+            { id: 135, level: "A2.1", kanji: "強い", reading: "つよい", meaning: "kuat" },
+            { id: 136, level: "A2.1", kanji: "天気", reading: "てんき", meaning: "cuaca" },
+            { id: 137, level: "A2.1", kanji: "晴れ", reading: "はれ", meaning: "cerah" },
+            { id: 138, level: "A2.1", kanji: "雨", reading: "あめ", meaning: "hujan" },
+            { id: 139, level: "A2.1", kanji: "雪", reading: "ゆき", meaning: "salju" },
+            { id: 140, level: "A2.1", kanji: "風", reading: "かぜ", meaning: "angin" },
+            { id: 141, level: "A2.1", kanji: "食堂", reading: "しょくどう", meaning: "kantin / ruang makan" },
+            { id: 142, level: "A2.1", kanji: "町", reading: "まち", meaning: "kota" },
+            { id: 143, level: "A2.1", kanji: "店", reading: "みせ", meaning: "toko" },
+            { id: 144, level: "A2.1", kanji: "便利（な）", reading: "べんり（な）", meaning: "praktis / praktis" },
+            { id: 145, level: "A2.1", kanji: "不便（な）", reading: "ふべん（な）", meaning: "tidak praktis" },
+            { id: 146, level: "A2.1", kanji: "静か（な）", reading: "しずか（な）", meaning: "tenang / sepi" },
+            { id: 147, level: "A2.1", kanji: "有名（な）", reading: "ゆうめい（な）", meaning: "terkenal" },
+            { id: 148, level: "A2.1", kanji: "多い", reading: "おおい", meaning: "banyak" },
+            { id: 149, level: "A2.1", kanji: "少ない", reading: "すくない", meaning: "sedikit" },
+            { id: 150, level: "A2.1", kanji: "遠い", reading: "とおい", meaning: "jauh" },
+            { id: 151, level: "A2.1", kanji: "神社", reading: "じんじゃ", meaning: "kuil Shinto" },
+            { id: 152, level: "A2.1", kanji: "銀行", reading: "ぎんこう", meaning: "bank" },
+            { id: 153, level: "A2.1", kanji: "道", reading: "みち", meaning: "jalan" },
+            { id: 154, level: "A2.1", kanji: "公園", reading: "こうえん", meaning: "taman" },
+            { id: 155, level: "A2.1", kanji: "お寺", reading: "おてら", meaning: "kuil Buddha" },
+            { id: 156, level: "A2.1", kanji: "右", reading: "みぎ", meaning: "kanan" },
+            { id: 157, level: "A2.1", kanji: "左", reading: "ひだり", meaning: "kiri" },
+            { id: 158, level: "A2.1", kanji: "近く", reading: "ちかく", meaning: "dekat" },
+            { id: 159, level: "A2.1", kanji: "車", reading: "くるま", meaning: "mobil" },
+            { id: 160, level: "A2.1", kanji: "送る", reading: "おくる", meaning: "mengirim / mengantar" },
+            { id: 161, level: "A2.1", kanji: "時間", reading: "じかん", meaning: "waktu / jam" },
+            { id: 162, level: "A2.1", kanji: "電車", reading: "でんしゃ", meaning: "kereta listrik" },
+            { id: 163, level: "A2.1", kanji: "場所", reading: "ばしょ", meaning: "tempat" },
+            { id: 164, level: "A2.1", kanji: "駅", reading: "えき", meaning: "stasiun" },
+            { id: 165, level: "A2.1", kanji: "受付", reading: "うけつけ", meaning: "resepsionis / tempat pendaftaran" },
+            { id: 166, level: "A2.1", kanji: "門", reading: "もん", meaning: "gerbang" },
+            { id: 167, level: "A2.1", kanji: "待つ", reading: "まつ", meaning: "menunggu" },
+            { id: 168, level: "A2.1", kanji: "止まる", reading: "とまる", meaning: "berhenti" },
+            { id: 169, level: "A2.1", kanji: "着く", reading: "つく", meaning: "tiba / sampai" },
+            { id: 170, level: "A2.1", kanji: "急ぐ", reading: "いそぐ", meaning: "bergegas / berburu-buru" },
+            { id: 171, level: "A2.1", kanji: "食事", reading: "しょくじ", meaning: "makan / hidangan" },
+            { id: 172, level: "A2.1", kanji: "お金", reading: "おかね", meaning: "uang" },
+            { id: 173, level: "A2.1", kanji: "楽しい", reading: "たのしい", meaning: "menyenangkan" },
+            { id: 174, level: "A2.1", kanji: "～店", reading: "～てん", meaning: "toko ~" },
+            { id: 175, level: "A2.1", kanji: "動物園", reading: "どうぶつえん", meaning: "kebun binatang" },
+            { id: 176, level: "A2.1", kanji: "博物館", reading: "はくぶつかん", meaning: "museum" },
+            { id: 177, level: "A2.1", kanji: "試合", reading: "しあい", meaning: "pertandingan" },
+            { id: 178, level: "A2.1", kanji: "難しい", reading: "むずかしい", meaning: "sulit / susah" },
+            { id: 179, level: "A2.1", kanji: "登る", reading: "のぼる", meaning: "mendaki / memanjat" },
+            { id: 180, level: "A2.1", kanji: "大学", reading: "だいがく", meaning: "universitas" },
+            { id: 181, level: "A2.1", kanji: "高校", reading: "こうこう", meaning: "SMA" },
+            { id: 182, level: "A2.1", kanji: "練習", reading: "れんしゅう", meaning: "latihan" },
+            { id: 183, level: "A2.1", kanji: "説明する", reading: "せつめいする", meaning: "menjelaskan" },
+            { id: 184, level: "A2.1", kanji: "漢字", reading: "かんじ", meaning: "kanji" },
+            { id: 185, level: "A2.1", kanji: "無料", reading: "むりょう", meaning: "gratis" },
+            { id: 186, level: "A2.1", kanji: "言う", reading: "いう", meaning: "berkata / mengatakan" },
+            { id: 187, level: "A2.1", kanji: "書く", reading: "かく", meaning: "menulis" },
+            { id: 188, level: "A2.1", kanji: "貸す", reading: "かす", meaning: "meminjamkan" },
+            { id: 189, level: "A2.1", kanji: "教える", reading: "おしえる", meaning: "mengajar / memberitahu" },
+            { id: 190, level: "A2.1", kanji: "午前", reading: "ごぜん", meaning: "a.m. (pagi/sebelum tengah hari)" },
+            { id: 191, level: "A2.1", kanji: "午後", reading: "ごご", meaning: "p.m. (siang/setelah tengah hari)" },
+            { id: 192, level: "A2.1", kanji: "先生", reading: "せんせい", meaning: "guru / pengajar" },
+            { id: 193, level: "A2.1", kanji: "教科書", reading: "きょうかしょ", meaning: "buku pelajaran" },
+            { id: 194, level: "A2.1", kanji: "教室", reading: "きょうしつ", meaning: "ruang kelas" },
+            { id: 195, level: "A2.1", kanji: "全部", reading: "ぜんぶ", meaning: "semua / seluruhnya" },
+            { id: 196, level: "A2.1", kanji: "～回", reading: "～かい", meaning: "~ kali (satuan frekuensi)" },
+            { id: 197, level: "A2.1", kanji: "参加する", reading: "さんかする", meaning: "berpartisipasi / ikut serta" },
+            { id: 198, level: "A2.1", kanji: "用意する", reading: "よういする", meaning: "menyiapkan / mempersiapkan" },
+            { id: 199, level: "A2.1", kanji: "飲み物", reading: "のみもの", meaning: "minuman" },
+            { id: 200, level: "A2.1", kanji: "牛肉", reading: "ぎゅうにく", meaning: "daging sapi" },
+            { id: 201, level: "A2.1", kanji: "豚肉", reading: "ぶたにく", meaning: "daging babi" },
+            { id: 202, level: "A2.1", kanji: "持って行く", reading: "もっていく", meaning: "membawa pergi" },
+            { id: 203, level: "A2.1", kanji: "材料", reading: "ざいりょう", meaning: "bahan-bahan" },
+            { id: 204, level: "A2.1", kanji: "お茶", reading: "おちゃ", meaning: "teh" },
+            { id: 205, level: "A2.1", kanji: "お酒", reading: "おさけ", meaning: "sake / minuman beralkohol" },
+            { id: 206, level: "A2.1", kanji: "野菜", reading: "やさい", meaning: "sayuran" },
+            { id: 207, level: "A2.1", kanji: "皿", reading: "さら", meaning: "piring" },
+            { id: 208, level: "A2.1", kanji: "売る", reading: "うる", meaning: "menjual" },
+            { id: 209, level: "A2.1", kanji: "調理方法", reading: "ちょうりほうほう", meaning: "metode memasak" },
+            { id: 210, level: "A2.1", kanji: "少し", reading: "すこし", meaning: "sedikit" },
+            { id: 211, level: "A2.1", kanji: "料理", reading: "りょうり", meaning: "masakan / memasak" },
+            { id: 212, level: "A2.1", kanji: "卵", reading: "たまご", meaning: "telur" },
+            { id: 213, level: "A2.1", kanji: "お湯", reading: "おゆ", meaning: "air panas" },
+            { id: 214, level: "A2.1", kanji: "味", reading: "あじ", meaning: "rasa" },
+            { id: 215, level: "A2.1", kanji: "甘い", reading: "あまい", meaning: "manis" },
+            { id: 216, level: "A2.1", kanji: "辛い", reading: "からい", meaning: "pedas" },
+            { id: 217, level: "A2.1", kanji: "苦手（な）", reading: "にがて（な）", meaning: "kurang mahir / tidak suka" },
+            { id: 218, level: "A2.1", kanji: "電気", reading: "でんき", meaning: "listrik / lampu" },
+            { id: 219, level: "A2.1", kanji: "音", reading: "おと", meaning: "suara / bunyi" },
+            { id: 220, level: "A2.1", kanji: "動く", reading: "うごく", meaning: "bergerak" },
+            { id: 221, level: "A2.1", kanji: "都合", reading: "つごう", meaning: "kondisi / kelapangan waktu" },
+            { id: 222, level: "A2.1", kanji: "数字", reading: "すうじ", meaning: "angka" },
+            { id: 223, level: "A2.1", kanji: "コピー機", reading: "こぴーき", meaning: "mesin fotokopi" },
+            { id: 224, level: "A2.1", kanji: "机", reading: "つくえ", meaning: "meja" },
+            { id: 225, level: "A2.1", kanji: "悪い", reading: "わるい", meaning: "buruk / jelek" },
+            { id: 226, level: "A2.1", kanji: "使う", reading: "つかう", meaning: "menggunakan" },
+            { id: 227, level: "A2.1", kanji: "終わる", reading: "おわる", meaning: "selesai / berakhir" },
+            { id: 228, level: "A2.1", kanji: "お願いします", reading: "おねがいします", meaning: "tolong / mohon" },
+            { id: 229, level: "A2.1", kanji: "氏名", reading: "しめい", meaning: "nama lengkap" },
+            { id: 230, level: "A2.1", kanji: "連絡先", reading: "れんらくさき", meaning: "kontak yang dapat dihubungi" },
+            { id: 231, level: "A2.1", kanji: "用事", reading: "ようじ", meaning: "urusan / keperluan" },
+            { id: 232, level: "A2.1", kanji: "理由", reading: "りゆう", meaning: "alasan" },
+            { id: 233, level: "A2.1", kanji: "別に", reading: "べつに", meaning: "tidak ada yang khusus" },
+            { id: 234, level: "A2.1", kanji: "早く", reading: "はやく", meaning: "dengan cepat / lebih awal" },
+            { id: 235, level: "A2.1", kanji: "吸う", reading: "すう", meaning: "menghisap (rokok)" },
+            { id: 236, level: "A2.1", kanji: "取る", reading: "とる", meaning: "mengambil" },
+            { id: 237, level: "A2.1", kanji: "帰る", reading: "かえる", meaning: "pulang" },
+            { id: 238, level: "A2.1", kanji: "伝える", reading: "つたえる", meaning: "menyampaikan" },
+            { id: 239, level: "A2.1", kanji: "記入する", reading: "きにゅうする", meaning: "mengisi / mencatat" },
+            { id: 240, level: "A2.1", kanji: "病気", reading: "びょうき", meaning: "penyakit / sakit" },
+            { id: 241, level: "A2.1", kanji: "住所", reading: "じゅうしょ", meaning: "alamat" },
+            { id: 242, level: "A2.1", kanji: "熱", reading: "ねつ", meaning: "demam / panas" },
+            { id: 243, level: "A2.1", kanji: "薬", reading: "くすり", meaning: "obat" },
+            { id: 244, level: "A2.1", kanji: "病院", reading: "びょういん", meaning: "rumah sakit" },
+            { id: 245, level: "A2.1", kanji: "医者", reading: "いしゃ", meaning: "dokter" },
+            { id: 246, level: "A2.1", kanji: "～才", reading: "～さい", meaning: "~ tahun (usia)" },
+            { id: 247, level: "A2.1", kanji: "痛い", reading: "いたい", meaning: "sakit / nyeri" },
+            { id: 248, level: "A2.1", kanji: "眠い", reading: "ねむい", meaning: "mengantuk" },
+            { id: 249, level: "A2.1", kanji: "寝る", reading: "ねる", meaning: "tidur" },
+            { id: 250, level: "A2.1", kanji: "口", reading: "くち", meaning: "mulut" },
+            { id: 251, level: "A2.1", kanji: "運動する", reading: "うんどうする", meaning: "berolahraga" },
+            { id: 252, level: "A2.1", kanji: "手", reading: "て", meaning: "tangan" },
+            { id: 253, level: "A2.1", kanji: "体", reading: "からだ", meaning: "tubuh / badan" },
+            { id: 254, level: "A2.1", kanji: "顔", reading: "かお", meaning: "wajah" },
+            { id: 255, level: "A2.1", kanji: "目", reading: "め", meaning: "mata" },
+            { id: 256, level: "A2.1", kanji: "耳", reading: "みみ", meaning: "telinga" },
+            { id: 257, level: "A2.1", kanji: "頭", reading: "あたま", meaning: "kepala" },
+            { id: 258, level: "A2.1", kanji: "足", reading: "あし", meaning: "kaki" },
+            { id: 259, level: "A2.1", kanji: "起きる", reading: "おきる", meaning: "bangun tidur" },
+            { id: 260, level: "A2.1", kanji: "歩く", reading: "あるく", meaning: "berjalan kaki" },
+            { id: 261, level: "A2.1", kanji: "走る", reading: "はしる", meaning: "berlari" },
+            { id: 262, level: "A2.1", kanji: "お父さん", reading: "おとうさん", meaning: "ayah (orang lain)" },
+            { id: 263, level: "A2.1", kanji: "お母さん", reading: "おかあさん", meaning: "ibu (orang lain)" },
+            { id: 264, level: "A2.1", kanji: "兄", reading: "あに", meaning: "kakak laki-laki (sendiri)" },
+            { id: 265, level: "A2.1", kanji: "お兄さん", reading: "おにいさん", meaning: "kakak laki-laki (orang lain)" },
+            { id: 266, level: "A2.1", kanji: "姉", reading: "あね", meaning: "kakak perempuan (sendiri)" },
+            { id: 267, level: "A2.1", kanji: "お姉さん", reading: "おねえさん", meaning: "kakak perempuan (orang lain)" },
+            { id: 268, level: "A2.1", kanji: "弟", reading: "おとうと", meaning: "adik laki-laki" },
+            { id: 269, level: "A2.1", kanji: "妹", reading: "いもうと", meaning: "adik perempuan" },
+            { id: 270, level: "A2.1", kanji: "夫", reading: "おっと", meaning: "suami (sendiri)" },
+            { id: 271, level: "A2.1", kanji: "妻", reading: "つま", meaning: "istri (sendiri)" },
+            { id: 272, level: "A2.1", kanji: "両親", reading: "りょうしん", meaning: "orang tua" },
+            { id: 273, level: "A2.1", kanji: "男の子", reading: "おとこのこ", meaning: "anak laki-laki" },
+            { id: 274, level: "A2.1", kanji: "女の子", reading: "おんなのこ", meaning: "anak perempuan" },
+            { id: 275, level: "A2.1", kanji: "誕生日", reading: "たんじょうび", meaning: "hari ulang tahun" },
+            { id: 276, level: "A2.1", kanji: "時計", reading: "とけい", meaning: "jam / arloji" },
+            { id: 277, level: "A2.1", kanji: "生まれる", reading: "うまれる", meaning: "lahir" },
+            { id: 278, level: "A2.1", kanji: "合格する", reading: "ごうかくする", meaning: "lulus (ujian)" },
+            { id: 279, level: "A2.1", kanji: "お祝い", reading: "おいわい", meaning: "perayaan / ucapan selamat" },
+            { id: 280, level: "A2.1", kanji: "結婚", reading: "けっこん", meaning: "pernikahan" },
+            { id: 281, level: "A2.1", kanji: "幸せ（な）", reading: "しあわせ（な）", meaning: "bahagia" },
+            { id: 282, level: "A2.1", kanji: "思う", reading: "おもう", meaning: "berpikir / mengira" },
+            { id: 283, level: "A2.1", kanji: "選ぶ", reading: "えらぶ", meaning: "memilih" }
         ];
 
-        // Load status hafal dari LocalStorage (jika ada)
-        let masteredIds = JSON.parse(localStorage.getItem('kanji_mastered_ids')) || [];
+        // Load status hafal dari LocalStorage
+        let masteredIds = JSON.parse(localStorage.getItem('kanji_mastered_ids_v2')) || [];
 
         let currentFilteredList = [];
         let currentIndex = 0;
         let isFlipped = false;
 
         const cardElement = document.getElementById('flashcard');
-        const cardContainer = document.getElementById('card-container');
         const kanjiElement = document.getElementById('card-kanji');
         const readingElement = document.getElementById('card-reading');
         const meaningElement = document.getElementById('card-meaning');
         const counterElement = document.getElementById('card-counter');
-        const filterSelect = document.getElementById('filterSelect');
+        const levelSelect = document.getElementById('levelSelect');
+        const statusSelect = document.getElementById('statusSelect');
         const emptyMessage = document.getElementById('emptyMessage');
         const actionButtons = document.getElementById('actionButtons');
         const controls = document.getElementById('controls');
         
         const statusTagFront = document.getElementById('statusTagFront');
         const statusTagBack = document.getElementById('statusTagBack');
+        const levelTagFront = document.getElementById('levelTagFront');
+        const levelTagBack = document.getElementById('levelTagBack');
 
-        // Update Statistik Keseluruhan
-        function updateStats() {
-            const masteredCount = masteredIds.length;
-            const unmasteredCount = rawVocab.length - masteredCount;
-            document.getElementById('stat-mastered').textContent = masteredCount;
-            document.getElementById('stat-unmastered').textContent = unmasteredCount;
-        }
-
-        // Terapkan Filter Pilihan (Semua / Belum Hafal / Sudah Hafal)
+        // Apply Filter Level & Status
         function applyFilter() {
-            const filterValue = filterSelect.value;
-            
-            if (filterValue === 'mastered') {
-                currentFilteredList = rawVocab.filter(item => masteredIds.includes(item.id));
-            } else if (filterValue === 'unmastered') {
-                currentFilteredList = rawVocab.filter(item => !masteredIds.includes(item.id));
-            } else {
-                currentFilteredList = [...rawVocab];
-            }
+            const selectedLevel = levelSelect.value;
+            const selectedStatus = statusSelect.value;
+
+            currentFilteredList = rawVocab.filter(item => {
+                const matchLevel = (selectedLevel === 'all') || (item.level === selectedLevel);
+                const isMastered = masteredIds.includes(item.id);
+                const matchStatus = (selectedStatus === 'all') || 
+                                    (selectedStatus === 'mastered' && isMastered) || 
+                                    (selectedStatus === 'unmastered' && !isMastered);
+                return matchLevel && matchStatus;
+            });
 
             currentIndex = 0;
             updateCardDisplay();
+        }
+
+        function updateStats() {
+            const selectedLevel = levelSelect.value;
+            const levelScopeList = rawVocab.filter(item => (selectedLevel === 'all') || (item.level === selectedLevel));
+            
+            const masteredCount = levelScopeList.filter(item => masteredIds.includes(item.id)).length;
+            const unmasteredCount = levelScopeList.length - masteredCount;
+
+            document.getElementById('stat-mastered').textContent = masteredCount;
+            document.getElementById('stat-unmastered').textContent = unmasteredCount;
         }
 
         function updateCardDisplay() {
@@ -472,7 +685,7 @@
             meaningElement.textContent = current.meaning;
             counterElement.textContent = `${currentIndex + 1} / ${currentFilteredList.length}`;
 
-            // Status Tagging
+            // Status & Level Tagging
             const isMastered = masteredIds.includes(current.id);
             const tagText = isMastered ? "✅ Sudah Hafal" : "❌ Belum Hafal";
             const tagClass = isMastered ? "status-tag mastered" : "status-tag unmastered";
@@ -481,6 +694,9 @@
             statusTagFront.className = tagClass;
             statusTagBack.textContent = tagText;
             statusTagBack.className = tagClass;
+
+            levelTagFront.textContent = current.level;
+            levelTagBack.textContent = current.level;
         }
 
         function flipCard() {
@@ -501,12 +717,11 @@
                 masteredIds = masteredIds.filter(id => id !== current.id);
             }
 
-            // Simpan ke LocalStorage Browser
-            localStorage.setItem('kanji_mastered_ids', JSON.stringify(masteredIds));
+            // Simpan ke LocalStorage
+            localStorage.setItem('kanji_mastered_ids_v2', JSON.stringify(masteredIds));
 
-            // Jika dalam mode filter tertentu, hapus item yang diubah dari antrean aktif saat ini
-            const filterValue = filterSelect.value;
-            if ((filterValue === 'mastered' && !isMastered) || (filterValue === 'unmastered' && isMastered)) {
+            const selectedStatus = statusSelect.value;
+            if ((selectedStatus === 'mastered' && !isMastered) || (selectedStatus === 'unmastered' && isMastered)) {
                 currentFilteredList.splice(currentIndex, 1);
                 if (currentIndex >= currentFilteredList.length) {
                     currentIndex = Math.max(0, currentFilteredList.length - 1);
@@ -531,7 +746,6 @@
 
         function shuffleCards() {
             if (currentFilteredList.length === 0) return;
-            // Fisher-Yates Shuffle
             for (let i = currentFilteredList.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [currentFilteredList[i], currentFilteredList[j]] = [currentFilteredList[j], currentFilteredList[i]];
@@ -540,7 +754,7 @@
             updateCardDisplay();
         }
 
-        // Jalankan awal
+        // Inisialisasi Tampilan
         applyFilter();
     </script>
 </body>
